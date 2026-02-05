@@ -34,5 +34,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(DepartamentoSeeder::class);
         $this->call(EstadoSeeder::class); 
+        $this->call(MunicipioSeeder::class);
     }
 }
