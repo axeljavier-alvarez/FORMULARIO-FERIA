@@ -9,6 +9,9 @@ class Solicitud extends Model
 {
     use HasFactory;
 
+    // usar forzadamente la tabla de solicitudes
+    protected $table = 'solicitudes';
+
     // cargar relaciones de 1
     protected $with = ['departamento', 'municipio', 'estado'];
 

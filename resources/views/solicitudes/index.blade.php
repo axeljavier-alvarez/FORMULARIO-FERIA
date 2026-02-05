@@ -2,12 +2,12 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
         <meta charset="utf-8">
-        <title>Formulario de Solicitud</title>
+        <title>Registro</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
-        {{-- <link rel="icon" href="{{ asset('imagenes/icono_muni.png') }}"> --}}
+        <link rel="icon" href="{{ asset('imagenes/icono_muni.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -33,7 +33,7 @@
 </style>
 
 
-<body class="bg-[#C0C0C0]">
+<body class="bg-slate-50">
 
 
     
