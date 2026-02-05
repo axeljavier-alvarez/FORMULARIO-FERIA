@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('documentos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('solicitud_id', 3)->constrained('solicitudes')->restrictOnDelete(); 
+            $table->foreignId('solicitud_id')->constrained('solicitudes')->restrictOnDelete(); 
             $table->string('ruta', 100);
             $table->timestamps();
         });

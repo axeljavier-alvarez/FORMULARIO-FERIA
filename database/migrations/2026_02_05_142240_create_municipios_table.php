@@ -14,7 +14,12 @@ return new class extends Migration
         Schema::create('municipios', function (Blueprint $table) {
             $table->id();
             $table->string('nombre', 100);
-            $table->foreignId('departamento_id', 3)->constrained('departamentos')->restrictOnDelete(); 
+            // $table->foreignId('departamento_id', 3)->constrained('departamentos')->restrictOnDelete(); 
+            $table->foreignId('departamento_id')
+            ->constrained('departamentos')
+            ->restrictOnDelete();
+
+
         });
     }
 
