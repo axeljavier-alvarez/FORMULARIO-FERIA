@@ -96,7 +96,7 @@ public $token = null;
 
         // Guardar token en tabla de accesos
         $solicitud->accesos()->create([
-            'token' => hash('sha256', $this->token), // guardas hash seguro
+            'token' => hash('sha256', $this->token),
             'expires_at' => now()->addDays(7)
         ]);
 
@@ -117,7 +117,7 @@ public $token = null;
             'zona',
         ]);
 
-        // Mostrar modal
+       
         $this->showModal = true;
 
     } catch (\Throwable $e) {

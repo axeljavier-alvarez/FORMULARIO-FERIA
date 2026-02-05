@@ -5,11 +5,12 @@
 
 
     <!-- Modal de éxito con QR -->
+
 <div 
     x-data="{ open: @entangle('showModal') }"
     x-show="open"
     x-transition
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-300 bg-opacity-50"
 >
     <div class="bg-white rounded-lg p-6 w-96 text-center shadow-lg">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Registro exitoso</h2>
@@ -21,7 +22,7 @@
                 alt="QR Token"
                 class="mx-auto mb-2"
             >
-            <p class="text-xs break-words">{{ $token }}</p>
+            {{-- <p class="text-xs break-words">{{ $token }}</p> --}}
         @endif
 
         <button 
@@ -32,6 +33,8 @@
         </button>
     </div>
 </div>
+
+
 
 
 
@@ -251,7 +254,7 @@
                             
                                    {{-- DEPARTAMENTO --}}
                             <div>
-                                <label class="text-sm font-medium text-slate-700">Departamento</label>
+                                <label class="text-sm font-medium text-slate-700">Departamento *poner id 1*</label>
                                 <div class="mt-2 flex overflow-hidden rounded-lg border border-slate-200 focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
                                     
                                     <input
@@ -273,7 +276,7 @@
 
                                {{-- DEPARTAMENTO --}}
                             <div>
-                                <label class="text-sm font-medium text-slate-700">Municipio</label>
+                                <label class="text-sm font-medium text-slate-700">Municipio *poner id 1*</label>
                                 <div class="mt-2 flex overflow-hidden rounded-lg border border-slate-200 focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
                                     
                                     <input
@@ -337,7 +340,7 @@
                             type="submit"
                             class="inline-flex items-center justify-center rounded-lg bg-violet-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-violet-700 focus:outline-none focus:ring-4 focus:ring-violet-200"
                         >
-                            Volgende stap
+                            Registrarse
                         </button>
                     </div>
                 </form>
