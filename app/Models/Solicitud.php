@@ -48,6 +48,12 @@ class Solicitud extends Model
         return $this->belongsTo(Estado::class);
     }
 
+    // solicitud y acceso
+    public function accesos()
+    {
+        return $this->hasMany(SolicitudAcceso::class);
+    }
+
 
 
 

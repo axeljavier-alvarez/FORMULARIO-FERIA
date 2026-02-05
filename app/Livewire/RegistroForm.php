@@ -33,7 +33,11 @@ public $departamento_id;
 public $municipio_id;
 public $zona;
 public $documentos;
-public $documento_id;
+
+
+// GUARDAR VALORES PARA MODAL Y TOKEN QR
+public $showModal = false;
+public $token = null;
 
     public function render()
     {
@@ -100,6 +104,18 @@ public $documento_id;
                 'estado_id' => 1,
                 'hash' => Str::uuid()
             ]);
+
+            // CREACION DEL TOKEN PARA CADA SOLICITUD
+            $token = Str::random(40);
+
+            $solicitud->accesos()->create([
+                
+                // sin variable publica
+                // 'token' => hash('sha256', $token),
+                'expires_at' => now()->addDays(7)
+            ]);
+
+
 
             DB::commit();
 

@@ -3,8 +3,15 @@
 <div>
 
 
-    @if(session()->has('success'))
+    {{-- @if(session()->has('success'))
 <div class="rounded-lg bg-green-50 p-4 text-sm text-green-700">
+    {{ session('success') }}
+</div>
+@endif --}}
+
+@if(session()->has('success'))
+<div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" 
+     class="mb-4 rounded-lg bg-green-100 border border-green-300 px-4 py-2 text-green-800 font-medium">
     {{ session('success') }}
 </div>
 @endif
@@ -264,7 +271,7 @@
                             </div>
 
                              {{-- ZONA --}}
-                            <div>
+                            {{-- <div>
                                 <label class="text-sm font-medium text-slate-700">Adjuntar cv</label>
                                 <div class="mt-2 flex overflow-hidden rounded-lg border border-slate-200 focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-100">
                                     
@@ -276,7 +283,7 @@
 
                                     />
                                 </div>
-                            </div>
+                            </div> --}}
 
 
 
