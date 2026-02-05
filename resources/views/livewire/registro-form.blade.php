@@ -3,6 +3,38 @@
 <div>
 
 
+
+    <!-- Modal de éxito con QR -->
+<div 
+    x-data="{ open: @entangle('showModal') }"
+    x-show="open"
+    x-transition
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+>
+    <div class="bg-white rounded-lg p-6 w-96 text-center shadow-lg">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Registro exitoso</h2>
+        <p class="mb-4">Escanea este QR para acceder:</p>
+
+        @if($token)
+            <img 
+                src="https://api.qrserver.com/v1/create-qr-code/?data={{ $token }}&size=150x150" 
+                alt="QR Token"
+                class="mx-auto mb-2"
+            >
+            <p class="text-xs break-words">{{ $token }}</p>
+        @endif
+
+        <button 
+            @click="open = false" 
+            class="mt-4 px-4 py-2 bg-violet-600 text-white rounded hover:bg-violet-700"
+        >
+            Cerrar
+        </button>
+    </div>
+</div>
+
+
+
     {{-- @if(session()->has('success'))
 <div class="rounded-lg bg-green-50 p-4 text-sm text-green-700">
     {{ session('success') }}

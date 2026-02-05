@@ -68,58 +68,42 @@ public $token = null;
     }
 
     public function submit()
-    {
-
+{
     $this->validate();
 
-    // dd([
-    //     'sobre_mi' => $this->sobre_mi,
-    //     'nombres' => $this->nombres,
-    //     'apellidos' => $this->apellidos,
-    //      'email' => $this->email,
-    //     'telefono' => $this->telefono,
-    //     'dpi' => $this->dpi,
-    //     'sexo' => $this->sexo,
-    //     'fechanac' => $this->fechanac,
-    //     'departamento_id' => $this->departamento_id,
-    //     'municipio_id' => $this->municipio_id,
-    //     'zona' => $this->zona
+    DB::beginTransaction();
+    try {
 
-    // ]);
-        DB::beginTransaction();
-         try {
+        // Guardar solicitud
+        $solicitud = Solicitud::create([
+            'sobre_mi' => $this->sobre_mi,
+            'nombres' => $this->nombres,
+            'apellidos' => $this->apellidos,
+            'email' => $this->email,
+            'telefono' => $this->telefono,
+            'dpi' => $this->dpi,
+            'sexo' => $this->sexo,
+            'fechanac' => $this->fechanac,
+            'departamento_id' => $this->departamento_id,
+            'municipio_id' => $this->municipio_id,
+            'zona' => $this->zona,
+            'estado_id' => 1,
+            'hash' => Str::uuid()
+        ]);
 
-            $solicitud = Solicitud::create([
-                'sobre_mi' => $this->sobre_mi,
-                'nombres' => $this->nombres,
-                'apellidos' => $this->apellidos,
-                'email' => $this->email,
-                'telefono' => $this->telefono,
-                'dpi' => $this->dpi,
-                'sexo' => $this->sexo,
-                'fechanac' => $this->fechanac,
-                'departamento_id' => $this->departamento_id,
-                'municipio_id' => $this->municipio_id,
-                'zona' => $this->zona,
-                'estado_id' => 1,
-                'hash' => Str::uuid()
-            ]);
+        // CREAR TOKEN PARA ACCESO
+        $this->token = Str::random(40);
 
-            // CREACION DEL TOKEN PARA CADA SOLICITUD
-            $token = Str::random(40);
+        // Guardar token en tabla de accesos
+        $solicitud->accesos()->create([
+            'token' => hash('sha256', $this->token), // guardas hash seguro
+            'expires_at' => now()->addDays(7)
+        ]);
 
-            $solicitud->accesos()->create([
-                
-                // sin variable publica
-                // 'token' => hash('sha256', $token),
-                'expires_at' => now()->addDays(7)
-            ]);
+        DB::commit();
 
-
-
-            DB::commit();
-
-            $this->reset([
+        // Limpiar campos
+        $this->reset([
             'sobre_mi',
             'nombres',
             'apellidos',
@@ -131,16 +115,17 @@ public $token = null;
             'departamento_id',
             'municipio_id',
             'zona',
-            ]);
+        ]);
 
-            session()->flash('success', 'Solicitud registrada correctamente');
+        // Mostrar modal
+        $this->showModal = true;
 
-         } catch (\Throwable $e) {
-            DB::rollBack();
-
-            dd([
-                'mensaje' => $e->getMessage()
-            ]);
-         }
+    } catch (\Throwable $e) {
+        DB::rollBack();
+        dd([
+            'mensaje' => $e->getMessage()
+        ]);
     }
+}
+
 }
