@@ -89,7 +89,7 @@ public $qrCodeData = null;
             'municipio_id' => $this->municipio_id,
             'zona' => $this->zona,
             'estado_id' => 1,
-            'hash' => Str::uuid()
+            
         ]);
 
         // CREAR TOKEN PARA ACCESO

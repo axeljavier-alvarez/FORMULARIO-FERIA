@@ -25,7 +25,6 @@ return new class extends Migration
             $table->foreignId('municipio_id')->constrained('municipios')->restrictOnDelete();
             $table->string('zona', 3)->nullable();
             $table->foreignId('estado_id')->constrained('estados')->restrictOnDelete();
-            $table->string('hash', 50);
             $table->timestamps();
         });
     }
