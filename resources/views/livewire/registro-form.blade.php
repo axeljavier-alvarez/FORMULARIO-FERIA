@@ -130,23 +130,24 @@
         </div>
     </div>
 
-    <div class="rounded-xl border bg-white shadow-sm overflow-hidden">
+
+    <!-- ORILLAS DEL FORMULARIO -->
+    <div class="rounded-2xl
+border border-slate-300/50
+bg-white
+shadow-md
+overflow-hidden">
+
         <div class="px-6 py-8 sm:px-10">
 
-            @if ($errors->any())
-    <div class="mb-4 rounded-lg bg-red-50 p-4">
-        <div class="flex">
-            <div class="ml-3">
-                <h3 class="text-sm font-medium text-red-800">Hay errores en el formulario:</h3>
-                <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        </div>
-    </div>
+   
+
+@if ($errors->any())
+<div class="mb-4 rounded-lg bg-red-50 border border-red-200 p-4 text-sm text-red-700">
+    Hay errores en el formulario. Verifica los campos marcados.
+</div>
 @endif
+
 
             <form wire:submit.prevent="submit" class="space-y-8">
                 
@@ -158,18 +159,46 @@
                         <p class="text-sm text-slate-500">Comencemos con tus datos de contacto.</p>
                     </div>
 
+                  
+
+
+
+
+
+
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         {{-- Nombres --}}
                         <div>
                             <label class="text-sm font-medium text-slate-700">Nombres</label>
-                            <input type="text" wire:model.defer="nombres" 
-                                class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all">
+                           <input
+                                type="text"
+                                wire:model.debounce.500ms="nombres"
+                                wire:keydown="resetError('nombres')"
+                                class="mt-2 w-full rounded-lg px-3 py-2 text-sm outline-none transition-all
+                                    border
+                                    @error('nombres')
+                                        border-red-500
+                                    @elseif(strlen($nombres ?? '') > 0)
+                                        mt-2 w-full rounded-lg px-3 py-2 text-sm outline-none transition-all
+        border border-slate-400/40
+
+        focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100
+                                    @else
+                                       mt-2 w-full rounded-lg px-3 py-2 text-sm outline-none transition-all
+        border border-slate-400/40
+        focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100
+                                    @enderror
+                                "
+                            >
+
+
+
                         </div>
                         {{-- Apellidos --}}
                         <div>
                             <label class="text-sm font-medium text-slate-700">Apellidos</label>
                             <input type="text" wire:model.defer="apellidos" 
-                                class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all">
+                                class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all">
                         </div>
                     </div>
 
@@ -177,16 +206,18 @@
                     <div>
                         <label class="text-sm font-medium text-slate-700">DPI</label>
                         <input type="text" wire:model.defer="dpi" placeholder="Número de DPI"
-                            class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all">
+                            class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all">
                     </div>
 
 
 
 
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="text-sm font-medium text-slate-700">Sexo</label>
-                            <select wire:model.defer="sexo" class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
+                            
+                            {{-- <label class="text-sm font-medium text-slate-700">como aparece en tu DPI</label> --}}
+                            <select wire:model.defer="sexo" class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
                                 <option value="">Seleccionar</option>
                                 <option value="M">Masculino</option>
                                 <option value="F">Femenino</option>
@@ -194,22 +225,22 @@
                         </div>
                         <div>
                             <label class="text-sm font-medium text-slate-700">Fecha de Nacimiento</label>
-                            <input type="date" wire:model.defer="fechanac" class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
+                            <input type="date" wire:model.defer="fechanac" class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
                         </div>
                     </div>
 
 
-                     <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                          
                       
                     <div>
                             <label class="text-sm font-medium text-slate-700">Email</label>
-                            <input type="email" wire:model.defer="email" class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
+                            <input type="email" wire:model.defer="email" class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
                     </div>
 
                          <div>
                             <label class="text-sm font-medium text-slate-700">Teléfono</label>
-                            <input type="number" wire:model.defer="telefono" class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
+                            <input type="number" wire:model.defer="telefono" class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
                         </div>
                     </div>
 
@@ -229,7 +260,7 @@
                         {{-- Departamento --}}
                         <div class="relative">
                             <label class="text-sm font-medium text-slate-700">Departamento</label>
-                            <select wire:model.live="departamento_id" class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none appearance-none pr-10">
+                            <select wire:model.live="departamento_id" class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none appearance-none pr-10">
                                 @foreach($departamentos as $depto)
                                     <option value="{{ $depto->id }}">{{ $depto->nombre }}</option>
                                 @endforeach
@@ -242,7 +273,7 @@
                         {{-- Municipio --}}
                         <div>
                             <label class="text-sm font-medium text-slate-700">Municipio</label>
-                            <select wire:model.defer="municipio_id" class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none disabled:bg-slate-50" {{ empty($municipios) ? 'disabled' : '' }}>
+                            <select wire:model.defer="municipio_id" class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none disabled:bg-slate-50" {{ empty($municipios) ? 'disabled' : '' }}>
                                 <option value="">Selecciona municipio</option>
                                 @foreach($municipios as $muni)
                                     <option value="{{ $muni->id }}">{{ $muni->nombre }}</option>
@@ -253,20 +284,20 @@
 
                       <div>
                             <label class="text-sm font-medium text-slate-700">Zona</label>
-                            <input type="number" wire:model.defer="zona" class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
+                            <input type="number" wire:model.defer="zona" class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
                         </div>
 
 
                     {{-- Sobre Mí --}}
                     <div>
-                        <label class="text-sm font-medium text-slate-700">¿Cuéntanos de ti?</label>
-                        <textarea wire:model.defer="sobre_mi" rows="3" class="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all" placeholder="Breve resumen de tu perfil profesional..."></textarea>
+                        <label class="text-sm font-medium text-slate-700">Cuéntanos de ti</label>
+                        <textarea wire:model.defer="sobre_mi" rows="3" class="mt-2 w-full rounded-lg border border-slate-400/40 px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all" placeholder="Breve resumen de tu perfil profesional..."></textarea>
                     </div>
 
                     {{-- DROPZONE PARA PDF (Simulado) --}}
                     <div>
                         <label class="text-sm font-medium text-slate-700">Adjuntar CV (Únicamente PDF, máx. 5MB)</label>
-                        <div class="mt-2 flex justify-center rounded-lg border-2 border-dashed border-slate-300 px-6 py-10 hover:border-emerald-500 hover:bg-emerald-50 transition-colors group">
+                        <div class="mt-2 flex justify-center rounded-lg border-2 border-dashed border border-slate-400/40 px-6 py-10 hover:border-emerald-500 hover:bg-emerald-50 transition-colors group">
                             <div class="text-center">
                                 <svg class="mx-auto h-12 w-12 text-slate-400 group-hover:text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -282,13 +313,45 @@
                             </div>
                         </div>
                     </div>
+
+
+                    
+                    <div class="mt-4">
+                            <label class="text-sm font-medium text-slate-700">
+                                Verificación de seguridad
+                            </label>
+
+                            <div class="flex items-center gap-3 mt-2">
+                                <img
+                                    src="{{ url('/captcha') }}"
+                                    alt="captcha"
+                                    class="rounded-lg border"
+                                >
+
+                                <button
+                                    type="button"
+                                    onclick="this.previousElementSibling.src='{{ url('/captcha') }}?'+Math.random()"
+                                    class="text-sm text-violet-600 hover:underline"
+                                >
+                                    Cambiar imagen
+                                </button>
+                            </div>
+
+                            <input
+                                type="text"
+                                wire:model.defer="captcha"
+                                placeholder="Ingrese el texto"
+                                class="mt-3 w-full rounded-lg border border-slate-400/40 px-3 py-2 text-sm focus:border-violet-500 focus:ring-violet-100 outline-none"
+                            >
+                        </div>
+
                 </div>
                 @endif
 
                 {{-- FOOTER BUTTONS --}}
-                <div class="flex flex-col-reverse gap-3 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex flex-col-reverse gap-3 pt-6 sm:flex-row sm:items-center sm:justify-between">
                     @if($step === 2)
-                        <button type="button" wire:click="prevStep" class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                        <button type="button" wire:click="prevStep" class="inline-flex items-center justify-center rounded-lg border border-slate-400/40 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
                             Anterior
                         </button>
                     @else
@@ -296,9 +359,23 @@
                     @endif
 
                     @if($step === 1)
-                        <button type="button" wire:click="nextStep" class="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200 transition-all">
+                       <button
+                            type="button"
+                            wire:click="nextStep"
+                            class="
+                                inline-flex items-center justify-center rounded-lg
+                                bg-[#7F41FF]
+                                px-6 py-2 text-sm font-semibold text-white shadow-sm
+                                hover:bg-[#9B6BFF]
+                                focus:outline-none
+                                focus:ring-4 focus:ring-[#E5D9FF]
+                                active:bg-[#6A2FFF]
+                                transition-all
+                            "
+                        >
                             Siguiente paso
                         </button>
+
                     @else
                         <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-8 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200 transition-all">
                             Completar Registro

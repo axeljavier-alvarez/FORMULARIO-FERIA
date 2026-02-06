@@ -39,23 +39,40 @@ public $municipios = [];
 public $showModal = false;
 public $token = null;
 public $qrCodeData = null;
+public $website;
 
 // PASOS PARA FORMULARIO
 public $step = 1;
+
+
+public $captcha;
+
+
+
+
+
 public function nextStep() {
-    // Validamos solo los campos del paso 1 antes de avanzar
-    $this->validate([
-        'nombres' => 'required|string|max:100',
-        'apellidos' => 'required|max:100',
-        'email' => 'required|email',
-        'telefono' => 'required|string|min:5',
-        'dpi' => 'required|string|max:13',
-        'sexo' => 'required',
-        'fechanac' => 'required',
-    ]);
+    // // Validamos solo los campos del paso 1 antes de avanzar
+    // $this->validate([
+    //     'nombres' => 'required|string|max:100',
+    //     'apellidos' => 'required|max:100',
+    //     'email' => 'required|email',
+    //     'telefono' => 'required|string|min:5',
+    //     'dpi' => 'required|string|max:13',
+    //     'sexo' => 'required',
+    //     'fechanac' => 'required',
+    // ]);
     
     $this->step = 2;
 }
+
+
+public function resetError($field)
+{
+    $this->resetErrorBag($field);
+}
+
+
 
 public function prevStep() {
     $this->step = 1;
@@ -68,6 +85,8 @@ public function prevStep() {
 
     public function mount()
     {
+
+    
         $this->departamentos = Departamento::orderBy('nombre')->get();
 
         $this->departamento_id = 7;
@@ -107,6 +126,16 @@ public function prevStep() {
 
     public function submit()
 {
+
+
+
+if (strtoupper($this->captcha) !== session('captcha_text')) {
+    throw \Illuminate\Validation\ValidationException::withMessages([
+        'captcha' => 'Datos incorrectos del captcha'
+    ]);
+}
+
+
     $this->validate();
 
     DB::beginTransaction();

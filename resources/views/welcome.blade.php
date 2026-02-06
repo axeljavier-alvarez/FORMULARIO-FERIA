@@ -22,7 +22,7 @@
     <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
        <div class="min-h-screen bg-slate-50">
     {{-- Top bar --}}
-    <div class="border-b bg-white">
+    <div class="border border-gray-400 bg-white">
         <div class="mx-auto max-w-5xl px-4 py-4">
             <div class="flex items-center gap-2 text-sm text-slate-600">
                 <a href="#" class="hover:text-slate-900">←</a>
@@ -87,7 +87,7 @@
                                     type="text"
                                     name="producer_name"
                                     value="Vincent de Gram"
-                                    class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900
+                                    class="mt-2 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-slate-900
                                            placeholder:text-slate-400 focus:border-violet-500 focus:ring-4 focus:ring-violet-100 outline-none"
                                     placeholder="Naam producent"
                                 />
@@ -109,7 +109,7 @@
                                     type="text"
                                     name="company_name"
                                     value="Cineville"
-                                    class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900
+                                    class="mt-2 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-slate-900
                                            placeholder:text-slate-400 focus:border-violet-500 focus:ring-4 focus:ring-violet-100 outline-none"
                                     placeholder="Naam productiehuis"
                                 />
