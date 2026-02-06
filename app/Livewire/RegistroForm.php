@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\WithFileUploads;
-
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class RegistroForm extends Component
 {
 
@@ -38,6 +38,7 @@ public $documentos;
 // GUARDAR VALORES PARA MODAL Y TOKEN QR
 public $showModal = false;
 public $token = null;
+public $qrCodeData = null;
 
     public function render()
     {
@@ -94,13 +95,34 @@ public $token = null;
         // CREAR TOKEN PARA ACCESO
         $this->token = Str::random(40);
 
-        // Guardar token en tabla de accesos
+      
+
+
+        // $this->qrCodeData = QrCode::size(150)
+        //     ->color(0, 0, 0) 
+        //     ->margin(1)      
+        //     ->generate($this->token)
+        //     ->toHtml();
+
+        // guardar token en la bd y seguridad sha256
         $solicitud->accesos()->create([
-            'token' => hash('sha256', $this->token),
-            'expires_at' => now()->addDays(7)
+            'token'      => hash('sha256', $this->token),
+            'expires_at' => now()->addDays(30) 
         ]);
 
-        DB::commit();
+        $urlAcceso = route('feria.acceso', ['token' => $this->token]);
+
+        $this->qrCodeData = QrCode::size(200)
+        ->color(0,0,0)
+        ->margin(1)
+        ->generate($urlAcceso)
+        ->toHtml();
+
+
+          DB::commit();
+    
+          // mostrar el modal si todo sale bien
+        $this->showModal = true;
 
         // Limpiar campos
         $this->reset([

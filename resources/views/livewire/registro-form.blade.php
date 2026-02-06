@@ -4,36 +4,101 @@
 
 
 
-    <!-- Modal de éxito con QR -->
-
-<div 
-    x-data="{ open: @entangle('showModal') }"
+   <div 
+    x-data="{ 
+        open: @entangle('showModal'), 
+        descargado: false,
+        downloadQR() {
+            const svg = document.querySelector('#qr-container svg');
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.fillStyle = 'white'; // Fondo blanco para que se vea bien en la galería
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+                const pngFile = canvas.toDataURL('image/png');
+                const downloadLink = document.createElement('a');
+                downloadLink.download = 'Mi_QR_Acceso.png';
+                downloadLink.href = pngFile;
+                downloadLink.click();
+                this.descargado = true; // Activa el botón de entendido
+            };
+            
+            img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+        }
+    }"
     x-show="open"
     x-transition
-    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-300 bg-opacity-50"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" 
+    style="display: none;"
 >
-    <div class="bg-white rounded-lg p-6 w-96 text-center shadow-lg">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4">Registro exitoso</h2>
-        <p class="mb-4">Escanea este QR para acceder:</p>
 
-        @if($token)
-            <img 
-                src="https://api.qrserver.com/v1/create-qr-code/?data={{ $token }}&size=150x150" 
-                alt="QR Token"
-                class="mx-auto mb-2"
-            >
-            {{-- <p class="text-xs break-words">{{ $token }}</p> --}}
+<div class="bg-white rounded-2xl p-8 w-80 text-center shadow-2xl
+border border-slate-100">
+        <div class="flex justify-center mb-4">
+            <div class="bg-green-100 rounded-full p-3">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>    
+        </div>
+
+        <h2 class="text-xl font-bold text-gray-900 mb-2">
+           ¡Registro a Feria de empleo exitoso! 
+        </h2>
+        <p x-show="!descargado" class="text-sm text-amber-600 font-medium mb-6">
+            <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+             Por favor, descarga tu QR para continuar
+        </p>
+
+        <p x-show="descargado" class="text-sm text-green-600 font-medium mb-6">
+            <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            ¡QR Guardado! Ya puedes finalizar
+        </p>
+
+
+        @if($qrCodeData)
+            <div id="qr-container" class="flex justify-center mb-6 p-4 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                {!! $qrCodeData !!}
+            </div>
         @endif
 
-        <button 
-            @click="open = false" 
-            class="mt-4 px-4 py-2 bg-violet-600 text-white rounded hover:bg-violet-700"
-        >
-            Cerrar
-        </button>
-    </div>
-</div>
 
+        <div class="space-y-3">
+            <button 
+                x-show="!descargado"
+                @click="downloadQR()" 
+                type="button"
+                class="w-full py-3 bg-violet-600 text-white rounded-xl font-bold hover:bg-violet-700 transition-all flex items-center justify-center gap-2"
+            >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Descargar QR
+            </button>
+
+            <button 
+                @click="open = false" 
+                :disabled="!descargado"
+                :class="descargado ? 'bg-slate-900 hover:bg-black' : 'bg-slate-200 cursor-not-allowed text-slate-400'"
+                class="w-full py-3 text-white rounded-xl font-semibold transition-all shadow-lg"
+            >
+            Entendido
+            </button>
+        </div>
+
+</div>
+    
+</div>
 
 
 
