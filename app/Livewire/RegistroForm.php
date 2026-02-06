@@ -33,12 +33,33 @@ public $departamento_id;
 public $municipio_id;
 public $zona;
 public $documentos;
-
+public $municipios = [];
 
 // GUARDAR VALORES PARA MODAL Y TOKEN QR
 public $showModal = false;
 public $token = null;
 public $qrCodeData = null;
+
+// PASOS PARA FORMULARIO
+public $step = 1;
+public function nextStep() {
+    // Validamos solo los campos del paso 1 antes de avanzar
+    $this->validate([
+        'nombres' => 'required|string|max:100',
+        'apellidos' => 'required|max:100',
+        'email' => 'required|email',
+        'telefono' => 'required|string|min:5',
+        'dpi' => 'required|string|max:13',
+        'sexo' => 'required',
+        'fechanac' => 'required',
+    ]);
+    
+    $this->step = 2;
+}
+
+public function prevStep() {
+    $this->step = 1;
+}
 
     public function render()
     {
@@ -48,6 +69,12 @@ public $qrCodeData = null;
     public function mount()
     {
         $this->departamentos = Departamento::orderBy('nombre')->get();
+
+        $this->departamento_id = 7;
+
+        $this->municipios = Municipio::where('departamento_id', 7)->get();
+
+        $this->municipio_id = 74;
     }
 
     protected function rules()
@@ -66,6 +93,16 @@ public $qrCodeData = null;
             'zona' => 'string',
 
         ];
+    }
+
+    public function updatedDepartamentoId($id)
+    {
+        $this->municipios = Municipio::where('departamento_id', $id)
+        ->orderBy('nombre')
+        ->get();
+
+        // resetear municipio seleccionado si cambia depto
+        $this->municipio_id = null;
     }
 
     public function submit()
