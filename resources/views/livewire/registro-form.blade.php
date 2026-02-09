@@ -190,6 +190,7 @@
                                     this.fecha !== '' &&
                                     this.correo.includes('@') &&
                                     this.telefono.length === 9;
+
                             },
 
                             formatDPI(value) {
@@ -510,35 +511,138 @@
                             </div>
                         </div>
 
+                       <div class="space-y-2">
+
+
+<!-- contador por letras -->
+<div
+    x-data="{
+        max: 1000,
+        count: 0,
+        updateCount() {
+            let text = this.$refs.textarea.value;
+
+            // contar caracteres
+            this.count = text.length;
+
+            if (this.count > this.max) {
+                text = text.slice(0, this.max);
+                this.$refs.textarea.value = text;
+                this.count = this.max;
+
+                // avisar a Livewire
+                this.$refs.textarea.dispatchEvent(new Event('input'));
+            }
+        }
+    }"
+    x-init="updateCount()"
+    class="space-y-3"
+>
+
+    <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+
+            <span class="text-slate-700 font-medium text-sm">
+                Perfil Profesional (Sobre ti)
+            </span>
+
+            <span class="text-[11px] text-slate-400">
+                (<span
+                    class="font-bold"
+                    :class="count >= max ? 'text-red-500' : 'text-slate-600'"
+                    x-text="count"
+                ></span>/1000)
+            </span>
+        </div>
+
+        <span class="text-[10px] uppercase tracking-wider font-bold text-[#7F22FE] bg-purple-50 px-2 py-0.5 rounded-lg border border-purple-100">
+            Opcional
+        </span>
+    </div>
+
+    <textarea
+        x-ref="textarea"
+        wire:model.defer="sobre_mi"
+        @input="updateCount()"
+        rows="3"
+        class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4
+               focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100
+               border outline-none transition-all focus:bg-white text-sm"
+        placeholder="Breve resumen de tu experiencia..."
+    ></textarea>
+
+</div>
+
+
+
                         <div class="space-y-2">
-                            <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <span class="text-slate-700 font-medium text-sm">Hoja de Vida (PDF)</span>
+    </div>
 
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-    </svg>
+    @if(!$ruta)
+        {{-- ESTADO: PARA CARGAR --}}
+        <div
+            class="group relative flex justify-center rounded-3xl border-2 border-dashed border-slate-200 bg-blue-50/30 px-6 py-10 transition-all hover:border-[#7F22FE] hover:bg-[#F0F9FF]"
+            wire:loading.class="opacity-50 pointer-events-none"
+        >
+            <div class="text-center">
+                <div wire:loading wire:target="ruta" class="mb-2">
+                    <svg class="animate-spin h-8 w-8 text-[#7F22FE] mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p class="text-xs text-[#7F22FE] font-bold">Subiendo...</p>
+                </div>
 
-                                <span class="text-slate-700 font-medium text-sm">Perfil Profesional (Sobre ti)</span>
-                            </div>
+                <div wire:loading.remove wire:target="ruta">
+                    <svg class="mx-auto h-12 w-12 text-[#7F22FE] mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <label class="cursor-pointer font-bold text-[#7F22FE]">
+                        Cargar archivo
+                        <input type="file" wire:model="ruta" class="sr-only" accept="application/pdf">
+                    </label>
+                    <p class="text-xs text-slate-400 mt-1">PDF máximo 2MB</p>
+                </div>
+            </div>
+        </div>
+    @else
+        {{-- ESTADO: ARCHIVO CARGADO --}}
+        <div class="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-2xl p-4 animate-fadeIn">
+            <div class="flex items-center gap-3 truncate">
+                <svg class="h-8 w-8 text-emerald-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/>
+                </svg>
+                <div class="flex flex-col truncate">
+                    <span class="text-sm font-bold text-slate-700 truncate">{{ $ruta->getClientOriginalName() }}</span>
+                    <span class="text-[10px] text-emerald-600 font-bold uppercase">Listo para enviar</span>
+                </div>
+            </div>
 
-                            <textarea wire:model.defer="sobre_mi" rows="3" class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] border outline-none" placeholder="Breve resumen de tu experiencia..."></textarea>
-                        </div>
+            <button
+                type="button"
+                wire:click="removeFile"
+                class="p-2 hover:bg-red-100 rounded-full text-red-500 transition-colors"
+                title="Eliminar archivo"
+            >
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    @endif
 
-                        <div class="space-y-2">
-                            <div class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                <span class="text-slate-700 font-medium text-sm">Hoja de Vida (PDF)</span>
-                            </div>
-
-                            <div class="group relative flex justify-center rounded-3xl border-2 border-dashed border-slate-200 bg-blue-50/30 px-6 py-10 transition-all hover:border-[#7F22FE] hover:bg-[#F0F9FF]">
-                                <div class="text-center">
-                                    <svg class="mx-auto h-12 w-12 text-[#7F22FE] mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    <label class="cursor-pointer font-bold text-[#7F22FE]">Cargar archivo <input type="file" class="sr-only" accept="application/pdf"></label>
-                                    <p class="text-xs text-slate-400 mt-1">Máximo 5MB</p>
-                                </div>
-                            </div>
-                        </div>
+    @error('ruta')
+        <span class="text-xs text-red-500 font-bold px-2">{{ $message }}</span>
+    @enderror
+</div>
 
                         <div class="rounded-[2rem] bg-gradient-to-br from-amber-50 to-orange-50 p-8 border-2 border-amber-200 shadow-xl shadow-amber-100">
                                 <label class="text-sm uppercase tracking-widest font-black text-amber-700 block mb-4 text-center">🔐 Verificación de Seguridad</label>
@@ -570,16 +674,35 @@
 
 
                             <button
-    type="button"
-    @click="if(paso1Valido()) { $wire.set('step', 2) }"
-    :disabled="!paso1Valido()"
-    class="w-full py-4 rounded-2xl font-bold transition-all shadow-lg"
-    :class="paso1Valido()
-        ? 'bg-[#7F22FE] text-white hover:bg-purple-700 shadow-purple-200'
-        : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'"
->
-    Siguiente Paso
-</button>
+                                type="button"
+                                @click="if(paso1Valido()) { $wire.set('step', 2) }"
+                                :disabled="!paso1Valido()"
+                                    class="flex items-center justify-center gap-2 rounded-2xl py-4 px-12 font-bold transition-all shadow-lg w-full sm:w-auto"
+
+                                :class="paso1Valido()
+                                    ? 'bg-[#7F22FE] text-white hover:bg-purple-700 shadow-purple-200'
+                                    : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'"
+                            >
+                                Siguiente Paso
+                            </button>
+
+{{-- <div class=" flex justify-center sm:justify-end">
+    <button
+        type="button"
+        @click="if(paso1Valido()) { $wire.set('step', 2) }"
+        :disabled="!paso1Valido()"
+        class="flex items-center justify-center gap-2 rounded-2xl py-4 px-12 font-bold transition-all shadow-lg w-full sm:w-auto"
+        :class="paso1Valido()
+            ? 'bg-[#7F22FE] text-white hover:bg-purple-700 shadow-purple-200 hover:-translate-y-1'
+            : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'"
+    >
+        <span>Siguiente Paso</span>
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+    </button>
+</div> --}}
+
 
 
                         @else

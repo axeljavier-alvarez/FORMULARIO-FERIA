@@ -16,7 +16,7 @@ class Solicitud extends Model
     protected $with = ['departamento', 'municipio', 'estado'];
 
     protected $fillable = [
-        'sobre_mi',        
+        'sobre_mi',
         'nombres',
         'apellidos',
         'email',
@@ -29,13 +29,11 @@ class Solicitud extends Model
         'zona',
         'estado_id',
         'hash',
+        'ruta'
     ];
 
-    public function documentos(){
-        return $this->hasMany(Documento::class);
-    }
 
-    
+
     public function departamento(){
         return $this->belongsTo(Departamento::class);
     }

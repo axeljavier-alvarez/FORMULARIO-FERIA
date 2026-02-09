@@ -48,6 +48,10 @@ public $step = 1;
 public $captcha;
 
 
+public $ruta;
+
+
+use WithFileUploads;
 
 
 
@@ -64,15 +68,15 @@ public function nextStep() {
         $this->telefono = '+502' . $soloNumeros;
     }
     // Validamos solo los campos del paso 1 antes de avanzar
-    // $this->validate([
-    //     'nombres' => 'required|string|max:100',
-    //     'apellidos' => 'required|max:100',
-    //     'email' => 'required|email',
-    //     'telefono' => 'required|string|min:12|max:12',
-    //     'dpi' => 'required|string|max:13',
-    //     'sexo' => 'required',
-    //     'fechanac' => 'required',
-    // ]);
+    $this->validate([
+        'nombres' => 'required|string|max:100',
+        'apellidos' => 'required|max:100',
+        'email' => 'required|email',
+        'telefono' => 'required|string|min:12|max:12',
+        'dpi' => 'required|string|max:13',
+        'sexo' => 'required',
+        'fechanac' => 'required',
+    ]);
 
     $this->step = 2;
 }
@@ -107,6 +111,20 @@ public function prevStep() {
         $this->municipio_id = 74;
     }
 
+    public function updatedRuta()
+{
+    $this->validateOnly('ruta');
+}
+
+    protected function messages()
+{
+    return [
+        'ruta.max' => 'El archivo es demasiado grande. El máximo permitido es 2MB.',
+        'ruta.mimes' => 'El formato debe ser obligatoriamente un PDF.',
+        'ruta.required' => 'Debes adjuntar tu hoja de vida.',
+        'ruta.file' => 'El archivo no se cargó correctamente.',
+    ];
+}
     protected function rules()
     {
         return [
@@ -121,7 +139,7 @@ public function prevStep() {
             'departamento_id' => 'required|exists:departamentos,id',
         'municipio_id'    => 'required|exists:municipios,id',
             'zona' => 'string',
-
+            'ruta' => 'required|file|mimes:pdf|max:2048',
         ];
     }
 
@@ -155,6 +173,13 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
     DB::beginTransaction();
     try {
 
+    // ARCHIVOS GUARDARLO
+    $pathFile = null;
+            if ($this->ruta) {
+                // Se guarda en storage/app/public/curriculum
+                $pathFile = $this->ruta->store('curriculum', 'public');
+            }
+
         // Guardar solicitud
         $solicitud = Solicitud::create([
             'sobre_mi' => $this->sobre_mi,
@@ -165,9 +190,10 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
             'dpi' => $this->dpi,
             'sexo' => $this->sexo,
             'fechanac' => $this->fechanac,
-            'departamento_id' => $this->departamento_id,
+            // 'departamento_id' => $this->departamento_id,
             'municipio_id' => $this->municipio_id,
             'zona' => $this->zona,
+            'ruta' => $pathFile,
             'estado_id' => 1,
 
         ]);
@@ -229,5 +255,12 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
         ]);
     }
 }
+
+// REMOVER ARCHIVO ANTES DE ENVIAR FORM
+public function removeFile()
+    {
+        $this->ruta = null;
+    }
+
 
 }

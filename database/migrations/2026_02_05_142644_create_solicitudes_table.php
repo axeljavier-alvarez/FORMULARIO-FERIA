@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('dpi', 15);
             $table->char('sexo', 1);
             $table->date('fechanac');
-            $table->foreignId('departamento_id')->constrained('departamentos')->restrictOnDelete(); 
             $table->foreignId('municipio_id')->constrained('municipios')->restrictOnDelete();
             $table->string('zona', 3)->nullable();
             $table->foreignId('estado_id')->constrained('estados')->restrictOnDelete();
+            $table->string('ruta', 100);
             $table->timestamps();
         });
     }
