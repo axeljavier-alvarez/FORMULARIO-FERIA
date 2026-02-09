@@ -161,38 +161,45 @@
             <div class="h-2 bg-gradient-to-r from-[#7F22FE] via-purple-400 to-[#F0F9FF]"></div>
 
             <div class="px-6 py-10 sm:px-12">
-@if(collect($errors->messages())->except('ruta')->isNotEmpty())
-                <div class="mb-8 flex items-center gap-3 rounded-2xl bg-red-50 p-4 text-sm text-red-800 border border-red-100">
-                    <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-                    <p class="font-medium">Faltan campos obligatorios por completar.</p>
-                </div>
-                @endif
+
+
+
+                @if($errors->has('dpi') || $errors->has('email'))
+           <div class="mb-8 flex items-center gap-3 rounded-2xl bg-amber-50 p-4 text-sm text-amber-800 border border-amber-200">
+        <svg class="h-5 w-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+        </svg>
+        <div>
+            <p class="font-black uppercase text-xs">Algunos campos que registraste ya existen</p>
+        </div>
+    </div>
+
+    @elseif(collect($errors->messages())->except('ruta')->isNotEmpty())
+        <div class="mb-8 flex items-center gap-3 rounded-2xl bg-red-50 p-4 text-sm text-red-800 border border-red-100">
+            <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+            <p class="font-medium">Por favor, completa todos los campos obligatorios correctamente.</p>
+        </div>
+    @endif
 
                 <form wire:submit.prevent="submit" class="space-y-8">
                     @if($step === 1)
 
                     <div
+                    wire:key="step-1-container"
                         class="space-y-6 animate-fadeIn"
                         x-data="{
-                            nombres: '',
-                            apellidos: '',
-                            dpi: '',
-                            genero: '',
-                            fecha: '',
-                            correo: '',
-                            telefono: '',
-
+                          
                             paso1Valido() {
-                                {{-- return this.nombres.length > 0 &&
-                                    this.apellidos.length > 0 &&
-                                    this.dpi.replace(/\s/g,'').length === 13 &&
-                                    this.genero !== '' &&
-                                    this.fecha !== '' &&
-                                    this.correo.includes('@') &&
-                                    this.telefono.length === 9; --}}
-                                    return true
-
-                            },
+            return ($wire.nombres?.length > 0) &&
+                   ($wire.apellidos?.length > 0) &&
+                   ($wire.dpi?.replace(/\s/g,'').length === 13) &&
+                   ($wire.sexo && $wire.sexo !== '') &&
+                   ($wire.fechanac && $wire.fechanac !== '') &&
+                   ($wire.email?.includes('@')) &&
+                   ($wire.telefono?.length === 9);
+        },
 
                             formatDPI(value) {
                                     let v = value.replace(/\D/g, '').substring(0, 13);
@@ -228,200 +235,209 @@
 
 
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                                <div class="space-y-2">
-                                    <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
+                                
+                            <div class="space-y-2">
+                                <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
                                     <div class="flex items-center gap-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                        </svg>
                                         <span>Nombres</span>
                                     </div>
 
-                                    <template x-if="nombres.length > 0">
+                                    <template x-if="$wire.nombres?.length > 0">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                         </svg>
                                     </template>
 
-                                    <template x-if="nombres.length === 0">
+                                    <template x-if="!$wire.nombres || $wire.nombres.length === 0">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                                         </svg>
                                     </template>
-                                    </label>
+                                </label>
 
-                                    <input type="text"
-                                        x-model="nombres"
-                                        wire:model.defer="nombres"
-                                        class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 text-slate-900 transition-all focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border"
-                                        placeholder="Ingresa tus nombres">
-                                </div>
+                                <input type="text"
+                                    wire:model.live="nombres" 
+                                    class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 text-slate-900 transition-all focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border"
+                                    placeholder="Ingresa tus nombres">
+                            </div>
 
-                                <div class="space-y-2">
-                                    <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
-                                        <div class="flex items-center gap-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0" />
-                                            </svg>
-                                            <span>Apellidos</span>
-                                        </div>
+                                
+                            <div class="space-y-2">
+    <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0" />
+            </svg>
+            <span>Apellidos</span>
+        </div>
 
-                                        <template x-if="apellidos.length > 0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                        </svg>
-                                        </template>
+        <template x-if="$wire.apellidos?.length > 0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+        </template>
 
-                                        <template x-if="apellidos.length === 0">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                            </svg>
-                                        </template>
+        <template x-if="!$wire.apellidos || $wire.apellidos.length === 0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+        </template>
+    </label>
 
+    <input type="text"
+        wire:model.live.debounce.250ms="apellidos"
+        class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 text-slate-900 transition-all focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border border-slate-100"
+        placeholder="Ingresa tus apellidos">
+</div>
 
-                                    </label>
-                                    <input type="text"
-                                        x-model="apellidos"
-                                        wire:model.defer="apellidos"
-                                        class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 text-slate-900 transition-all focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border border-slate-100"
-                                        placeholder="Ingresa tus apellidos">
-                                </div>
                             </div>
 
 
+                          
                             <div class="space-y-2">
+    <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+            </svg>
+            <span>DPI / Identificación</span>
+        </div>
 
-                <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
-                    <div class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
-                        </svg>
-                        <span>DPI / Identificación</span>
-                    </div>
+        <template x-if="($wire.dpi ?? '').toString().replace(/\D/g,'').length === 13">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+        </template>
 
-                    <template x-if="dpi.length > 0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
-                    </template>
-
-                    <template x-if="dpi.length === 0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                    </template>
-                </label>
+        <template x-if="!$wire.dpi || ($wire.dpi ?? '').toString().replace(/\D/g,'').length !== 13">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+        </template>
+    </label>
 
     <input
-    type="text"
-    x-model="dpi"
-    x-on:input="dpi = formatDPI($event.target.value)"
-    wire:model.defer="dpi"
-    placeholder="0000 00000 0000"
-    class="w-full rounded-2xl bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border font-mono transition-all"
-    :class="dpi.replace(/\s/g,'').length === 13 ? 'border-slate-100' : 'border-slate-100'"
-    @blur="$wire.set('dpi', dpi.replace(/\s/g, ''))"
->
-
+        type="text"
+        wire:model="dpi"
+        placeholder="0000 00000 0000"
+        maxlength="15"
+        
+        /* 1. Al entrar (click), aplicamos el formato con espacios */
+        x-on:focus="$el.value = formatDPI($el.value)"
+        
+        /* 2. Mientras escribe, mantenemos el formato */
+        x-on:input="$el.value = formatDPI($el.value)"
+        
+        /* 3. Al salir (click fuera), quitamos todos los espacios */
+        x-on:blur="$el.value = $el.value.replace(/\D/g, '')"
+        
+        class="w-full rounded-2xl bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border font-mono transition-all border-slate-100 text-slate-900"
+    >
 </div>
+
 
 
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                             <div class="space-y-2">
-
-                                 <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
+                                    <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
                                         <div class="flex items-center gap-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                             </svg>
                                             <span>Género</span>
                                         </div>
-                                        <template x-if="genero.length > 0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                        </svg>
+
+                                        <template x-if="$wire.sexo && $wire.sexo !== ''">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                            </svg>
                                         </template>
 
-                                        <template x-if="genero.length === 0">
+                                        <template x-if="!$wire.sexo || $wire.sexo === ''">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                                             </svg>
                                         </template>
                                     </label>
 
-                                <select wire:model.defer="sexo"
-                                x-model="genero"
-                                class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border">
-                                    <option value="">Seleccionar...</option>
-                                    <option value="M">Masculino</option>
-                                    <option value="F">Femenino</option>
-                                </select>
+                                    <select wire:model.live="sexo"
+                                        class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border text-slate-900">
+                                        <option value="">Seleccionar...</option>
+                                        <option value="M">Masculino</option>
+                                        <option value="F">Femenino</option>
+                                    </select>
                             </div>
 
-                           <div class="space-y-2"> <label class="flex justify-between items-center mx-1">
-        <div class="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
+                        
+                            <div class="space-y-2"> 
+                                        <label class="flex justify-between items-center mx-1">
+                                            <div class="flex items-center gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
 
-            <span class="text-xs uppercase tracking-wider font-black text-slate-500">Fecha de nacimiento</span>
+                                                <span class="text-xs uppercase tracking-wider font-black text-slate-500">Fecha de nacimiento</span>
 
-            <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-0.5 rounded-full font-bold border border-yellow-200">
-                INGRESAR LA DE TU DPI
-            </span>
-        </div>
+                                                <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-0.5 rounded-full font-bold border border-yellow-200">
+                                                    INGRESAR LA DE TU DPI
+                                                </span>
+                                            </div>
 
-        <div>
-            <template x-if="fecha.length > 0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                </svg>
-            </template>
+                                            <div>
+                                                <template x-if="$wire.fechanac && $wire.fechanac !== ''">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </template>
 
-            <template x-if="fecha.length === 0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                </svg>
-            </template>
-        </div>
-    </label>
+                                                <template x-if="!$wire.fechanac || $wire.fechanac === ''">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </template>
+                                            </div>
+                                        </label>
 
-    <input type="date"
-        wire:model.defer="fechanac"
-        x-model="fecha"
-        class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border transition-all text-slate-600"
-        :class="fecha.length > 0 ? 'border-emerald-500/50' : 'border-slate-100'"
-    >
-</div>
+                                        <input type="date"
+                                            wire:model.live="fechanac"
+                                            class="w-full rounded-2xl bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border transition-all text-slate-600"
+                                            :class="$wire.fechanac ? 'border-slate-100' : 'border-slate-100'"
+                                        >
+                            </div>
+
                         </div>
 
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            
                             <div class="space-y-2">
-                                <label class="flex justify-between items-center text-xs uppercase tracking-wider
-                                font-black text-slate-500 mx-1">
+    <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
 
-                                <div class="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                    </svg>
-                                    <span>Correo electrónico</span>
-                                </div>
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <span>Correo electrónico</span>
+        </div>
 
-                                       <template x-if="correo.length > 0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                </svg>
-            </template>
+        <template x-if="$wire.email?.length > 0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+        </template>
 
-            <template x-if="correo.length === 0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                </svg>
-            </template>
-                                </label>
-                                    <input type="email" wire:model.defer="email"
-                                    x-model="correo" placeholder="ejemplo@correo.com" class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border">
-                                </div>
+        <template x-if="!$wire.email || $wire.email.length === 0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+        </template>
+    </label>
+
+    <input type="email" 
+        wire:model.debounce.300ms="email"
+        placeholder="ejemplo@correo.com" 
+        class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border text-slate-900 transition-all">
+</div>
+
 
 
                                 <div class="space-y-2">
@@ -433,13 +449,13 @@
             <span>Teléfono</span>
         </div>
 
-        <template x-if="telefono.length === 9">
+        <template x-if="$wire.telefono?.length === 9">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
         </template>
 
-        <template x-if="telefono.length !== 9">
+        <template x-if="!$wire.telefono || $wire.telefono.length !== 9">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
             </svg>
@@ -453,21 +469,22 @@
         </div>
 
         <input type="text"
-            x-model="telefono"
-            x-on:input="telefono = formatTel($event.target.value)"
-            wire:model.defer="telefono"
+            x-on:input="$el.value = formatTel($el.value)"
+            wire:model.live="telefono"
             placeholder="0000-0000"
-            class="w-full rounded-2xl border-slate-100 bg-slate-50 pl-24 pr-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border transition-all font-mono"
-            >
+            maxlength="9"
+            class="w-full rounded-2xl border-slate-100 bg-slate-50 pl-24 pr-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border transition-all font-mono text-slate-900"
+        >
     </div>
 </div>
-
                     </div>
                     @endif
 
                     @if($step === 2)
                    
-            <div class="space-y-6 animate-fadeIn">
+            <div 
+            wire:key="step-2-container"
+            class="space-y-6 animate-fadeIn">
     <div x-data="{ 
         departamento_id: @entangle('departamento_id'), 
         municipio_id: @entangle('municipio_id'),
@@ -516,7 +533,7 @@
                         </svg>
                     </template>
                 </label>
-                <select x-model="departamento_id" 
+                <select wire:model.live="departamento_id" 
                     class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] border outline-none text-slate-700 font-medium">
                     <option value="">Selecciona...</option>
                     @foreach($departamentos as $depto)
@@ -539,7 +556,7 @@
                         </svg>
                     </template>
                 </label>
-                <select id="municipio-select" x-model="municipio_id" 
+                <select id="municipio-select" wire:model.live="municipio_id" 
                     class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] border outline-none text-slate-700 font-medium disabled:opacity-50"
                     {{ empty($municipios) ? 'disabled' : '' }}>
                     <option value="">Selecciona municipio</option>
@@ -801,20 +818,22 @@
                         @if($step === 1)
 
 
-                            {{-- <button
-                                type="button"
-                                @click="if(paso1Valido()) { $wire.set('step', 2) }"
-                                :disabled="!paso1Valido()"
-                                    class="flex items-center justify-center gap-2 rounded-2xl py-4 px-12 font-bold transition-all shadow-lg w-full sm:w-auto"
+                          
+                        <button
+                            type="button"
+                            wire:click="nextStep"
+                            :disabled="!paso1Valido()"
+                            class="flex items-center justify-center gap-2 rounded-2xl py-4 px-12 font-bold transition-all shadow-lg w-full sm:w-auto"
+                            :class="paso1Valido() 
+                                ? 'bg-[#7F22FE] text-white hover:bg-purple-700 shadow-purple-200' 
+                                : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'"
+                        >
+                            <span wire:loading.remove wire:target="nextStep">Siguiente Paso</span>
+                            <span wire:loading wire:target="nextStep">Validando datos...</span>
+                        </button>
 
-                                :class="paso1Valido()
-                                    ? 'bg-[#7F22FE] text-white hover:bg-purple-700 shadow-purple-200'
-                                    : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'"
-                            >
-                                Siguiente Paso
-                            </button> --}}
 
-<div class=" flex justify-center sm:justify-end">
+{{-- <div class=" flex justify-center sm:justify-end">
     <button
         type="button"
         @click="if(paso1Valido()) { $wire.set('step', 2) }"
@@ -829,7 +848,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
         </svg>
     </button>
-</div>
+</div> --}}
 
 
 

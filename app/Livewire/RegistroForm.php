@@ -57,42 +57,18 @@ use WithFileUploads;
 
 
 public function nextStep() {
-
-// quitar espacios a pi antes de validar
-    // if($this->dpi) {
-    //     $this->dpi = preg_replace('/\D/', '', $this->dpi);
-    // }
-
-    // quitar cualquier cosa que no sea numero y agregar prefijo
-    if($this->telefono){
-        $soloNumeros = preg_replace('/\D/', '', $this->telefono);
-        $this->telefono = '+502' . $soloNumeros;
-    }
-    // Validamos solo los campos del paso 1 antes de avanzar
     $this->validate([
         'nombres' => 'required|string|max:100',
         'apellidos' => 'required|max:100',
-
-        'email' => [
-        'required',
-        'email',
-        Rule::unique('solicitudes', 'email'),
-        ],
-
-        'telefono' => 'required|string|min:12|max:12',
-        'dpi' => [
-        'required',
-        'dpi',
-        Rule::unique('solicitudes', 'dpi'),
-        ],
-        
+        'email' => ['required', 'email', Rule::unique('solicitudes', 'email')],
+        'telefono' => 'required|string|min:9|max:9', // Acepta 1234-5678
+        'dpi' => ['required', 'string', 'min:13', 'max:15', Rule::unique('solicitudes', 'dpi')], // Acepta espacios
         'sexo' => 'required',
         'fechanac' => 'required',
     ]);
 
     $this->step = 2;
 }
-
 
 public function resetError($field)
 {
@@ -147,36 +123,42 @@ public function prevStep() {
         'ruta.file' => 'El archivo no se cargó correctamente.',
     ];
 }
-    protected function rules()
-    {
-        return [
-            'sobre_mi'  => 'string|max:1000',
-            'nombres' => 'required|string|max:100',
-            'apellidos' => 'required|max:100',
+   protected function rules()
+{
+    return [
+        'sobre_mi' => 'nullable|string|max:1000',
+        'nombres' => 'required|string|max:100',
+        'apellidos' => 'required|max:100',
+        'email' => ['required', 'email', Rule::unique('solicitudes', 'email')],
+        // Estas reglas deben coincidir con lo que el usuario escribe (con guion y espacios)
+        'telefono' => 'required|string|min:9|max:9', 
+        'dpi' => ['required', 'string', 'min:13', 'max:15', Rule::unique('solicitudes', 'dpi')],
+        'sexo' => 'required|string',
+        'fechanac' => 'required|string',
+        'departamento_id' => 'required|exists:departamentos,id',
+        'municipio_id' => 'required|exists:municipios,id',
+        'zona' => 'nullable|string',
+        'ruta' => 'required|file|mimes:pdf|max:2048',
+    ];
+}
 
-            'email' => [
-            'required',
-            'email',
-            Rule::unique('solicitudes', 'email'),
-            ],
-        
-            'telefono' => 'required|string|min:5',
 
-            'dpi' => [
-        'required',
-        'dpi',
-        Rule::unique('solicitudes', 'dpi'),
-        ],
-        
-            'dpi' => 'required|string|max:13',
-            'sexo' => 'required|string',
-            'fechanac' => 'required|string',
-            'departamento_id' => 'required|exists:departamentos,id',
-        'municipio_id'    => 'required|exists:municipios,id',
-            'zona' => 'string',
-            'ruta' => 'required|file|mimes:pdf|max:2048',
-        ];
+// METODO UPDATE QUE SE EJECUTA AUTOMATICAMENTE
+// Esto detecta cambios en tiempo real para campos específicos
+public function updated($propertyName)
+{
+    if ($propertyName === 'email' || $propertyName === 'dpi') {
+        $this->validateOnly($propertyName, [
+            'email' => ['required', 'email', Rule::unique('solicitudes', 'email')],
+            'dpi' => ['required', 'string', 'min:13', Rule::unique('solicitudes', 'dpi')],
+        ], [
+            'email.unique' => 'Este correo ya está registrado en nuestro sistema.',
+            'dpi.unique' => 'Este número de DPI ya tiene una solicitud activa.',
+        ]);
     }
+}
+
+
 
     public function updatedDepartamentoId($id)
     {
@@ -192,9 +174,24 @@ public function prevStep() {
 {
 
 // asegurarse que el telefono lleve +502
-if (!str_starts_with($this->telefono, '+502')) {
-        $this->telefono = '+502' . preg_replace('/\D/', '', $this->telefono);
- }
+// if (!str_starts_with($this->telefono, '+502')) {
+//         $this->telefono = '+502' . preg_replace('/\D/', '', $this->telefono);
+//  }
+
+
+// dd([
+//         'nombres' => $this->nombres,
+//         'telefono' => $this->telefono,
+//         'dpi' => $this->dpi,
+//         'email' => $this->email,
+//         'sexo' => $this->sexo,
+//         'fechanac' => $this->fechanac,
+//         'municipio_id' => $this->municipio_id,
+//         'ruta' => $this->ruta,
+//         'captcha' => $this->captcha,
+//         'session_captcha' => session('captcha_text')
+//     ]);
+
 
 if (strtoupper($this->captcha) !== session('captcha_text')) {
     throw ValidationException::withMessages([
@@ -203,7 +200,16 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
 }
 
 
-    $this->validate();
+
+
+    // $this->telefono = preg_replace('/\D/', '', $this->telefono); 
+    // $this->dpi = preg_replace('/\D/', '', $this->dpi);
+
+        $this->validate();
+
+        // $telefonoParaBD = '+502' . $this->telefono; 
+    // $dpiParaBD = $this->dpi;
+
 
     DB::beginTransaction();
     try {
@@ -221,8 +227,8 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
             'nombres' => $this->nombres,
             'apellidos' => $this->apellidos,
             'email' => $this->email,
-            'telefono' => $this->telefono,
-            'dpi' => $this->dpi,
+            'telefono'     => $this->telefono,
+            'dpi'      => $this->dpi,
             'sexo' => $this->sexo,
             'fechanac' => $this->fechanac,
             // 'departamento_id' => $this->departamento_id,
@@ -262,8 +268,7 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
 
           DB::commit();
 
-          // mostrar el modal si todo sale bien
-        $this->showModal = true;
+        
 
         // Limpiar campos
         $this->reset([
@@ -275,12 +280,37 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
             'dpi',
             'sexo',
             'fechanac',
-            'departamento_id',
-            'municipio_id',
             'zona',
+            'ruta',   
+            'captcha'  
         ]);
 
 
+        $deptoGuate = Departamento::whereRaw('LOWER(nombre) = ?', ['guatemala'])->first();
+
+
+        if ($deptoGuate) {
+            $this->departamento_id = $deptoGuate->id;
+
+            $muniGuate = Municipio::where('departamento_id', $deptoGuate->id)
+                ->whereRaw('LOWER(nombre) = ?', ['guatemala'])
+                ->first();
+
+            $this->municipios = Municipio::where('departamento_id', $deptoGuate->id)
+                ->orderBy('nombre')
+                ->get();
+
+            $this->municipio_id = $muniGuate ? $muniGuate->id : null;
+        }
+
+
+
+          // mostrar el modal si todo sale bien
+        $this->showModal = true;
+        $this->reloadCaptcha();
+
+
+        
         // $this->showModal = true;
 
     } catch (\Throwable $e) {
