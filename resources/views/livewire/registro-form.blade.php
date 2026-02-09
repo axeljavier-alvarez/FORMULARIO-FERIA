@@ -142,19 +142,23 @@
 
 
         {{-- Indicador de Pasos --}}
+       
         <nav class="mb-8" aria-label="Progress">
             <ol class="flex items-center justify-center space-x-4 md:space-x-8">
                 <li class="flex items-center gap-3">
-                    <span class="flex h-10 w-10 items-center justify-center rounded-xl {{ $step === 1 ? 'bg-[#7F22FE] text-white shadow-lg' : 'bg-white text-[#7F22FE] border border-purple-100' }} font-bold transition-all">1</span>
-                    <span class="hidden sm:inline text-sm font-bold {{ $step === 1 ? 'text-slate-900' : 'text-slate-400' }}">Datos Personales</span>
+                    <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl {{ $step === 1 ? 'bg-[#7F22FE] text-white shadow-lg' : 'bg-white text-[#7F22FE] border border-purple-100' }} font-bold transition-all">1</span>
+                    <span class="text-xs sm:text-sm font-bold {{ $step === 1 ? 'text-slate-900' : 'text-slate-400' }}">Datos Personales</span>
                 </li>
-                <li class="h-px w-12 bg-slate-300"></li>
+
+                <li class="h-px w-6 md:w-12 bg-slate-300"></li>
+
                 <li class="flex items-center gap-3">
-                    <span class="flex h-10 w-10 items-center justify-center rounded-xl {{ $step === 2 ? 'bg-[#7F22FE] text-white shadow-lg' : 'bg-white text-slate-400 border border-slate-200' }} font-bold transition-all">2</span>
-                    <span class="hidden sm:inline text-sm font-bold {{ $step === 2 ? 'text-slate-900' : 'text-slate-400' }}">Ubicación y CV</span>
+                    <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl {{ $step === 2 ? 'bg-[#7F22FE] text-white shadow-lg' : 'bg-white text-slate-400 border border-slate-200' }} font-bold transition-all">2</span>
+                    <span class="text-xs sm:text-sm font-bold {{ $step === 2 ? 'text-slate-900' : 'text-slate-400' }}">Ubicación y CV</span>
                 </li>
             </ol>
         </nav>
+
 
         {{-- FORMULARIO --}}
         <div class="overflow-hidden rounded-[2rem] border border-white bg-white/80 backdrop-blur-sm shadow-2xl shadow-blue-900/10">
@@ -196,15 +200,43 @@
                         class="space-y-6 animate-fadeIn"
                         x-data="{
                           
+                        cuiValido(cui) {
+                                if (!cui) return false;
+                                let db = cui.toString().replace(/\D/g, '');
+                                if (db.length !== 13) return false;
+
+                                let numero = db.substring(0, 8);
+                                let verificador = parseInt(db.substring(8, 9));
+                                let depto = parseInt(db.substring(9, 11));
+                                let muni = parseInt(db.substring(11, 13));
+
+                                let munisPorDepto = [17, 8, 16, 16, 13, 14, 19, 8, 24, 21, 9, 30, 32, 21, 8, 17, 14, 5, 11, 11, 7, 17];
+
+                                // Validar Depto y Municipio
+                                if (depto < 1 || depto > munisPorDepto.length || muni < 1 || muni > munisPorDepto[depto - 1]) {
+                                    return false;
+                                }
+
+                                // Validación Módulo 11
+                                let total = 0;
+                                for (let i = 0; i < 8; i++) {
+                                    total += parseInt(numero[i]) * (i + 2);
+                                }
+                                let digitoCalculado = total % 11;
+
+                                return digitoCalculado === verificador;
+                            },
+
                             paso1Valido() {
-            {{-- return ($wire.nombres?.length > 0) &&
+                    return ($wire.nombres?.length > 0) &&
                    ($wire.apellidos?.length > 0) &&
-                   ($wire.dpi?.replace(/\s/g,'').length === 13) &&
+                   this.cuiValido($wire.dpi)
+                    &&
                    ($wire.sexo && $wire.sexo !== '') &&
                    ($wire.fechanac && $wire.fechanac !== '') &&
                    ($wire.email?.includes('@')) &&
-                   ($wire.telefono?.length === 9); --}}
-                   return true;
+                   ($wire.telefono?.length === 9);
+                   {{-- return true; --}}
         },
 
                             formatDPI(value) {
@@ -309,13 +341,13 @@
             <span>DPI / Identificación</span>
         </div>
 
-        <template x-if="($wire.dpi ?? '').toString().replace(/\D/g,'').length === 13">
+        <template x-if="cuiValido($wire.dpi)">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
         </template>
 
-        <template x-if="!$wire.dpi || ($wire.dpi ?? '').toString().replace(/\D/g,'').length !== 13">
+        <template x-if="!cuiValido($wire.dpi)">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
             </svg>
@@ -324,23 +356,15 @@
 
     <input
         type="text"
-        wire:model="dpi"
+        wire:model.live="dpi"
         placeholder="0000 00000 0000"
         maxlength="15"
-        
-        /* 1. Al entrar (click), aplicamos el formato con espacios */
         x-on:focus="$el.value = formatDPI($el.value)"
-        
-        /* 2. Mientras escribe, mantenemos el formato */
         x-on:input="$el.value = formatDPI($el.value)"
-        
-        /* 3. Al salir (click fuera), quitamos todos los espacios */
         x-on:blur="$el.value = $el.value.replace(/\D/g, '')"
-        
         class="w-full rounded-2xl bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border font-mono transition-all border-slate-100 text-slate-900"
     >
 </div>
-
 
 
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -855,7 +879,7 @@
 
 
                           
-                        {{-- <button
+                        <button
                             type="button"
                             wire:click="nextStep"
                             :disabled="!paso1Valido()"
@@ -866,9 +890,9 @@
                         >
                             <span wire:loading.remove wire:target="nextStep">Siguiente Paso</span>
                             <span wire:loading wire:target="nextStep">Validando datos...</span>
-                        </button> --}}
+                        </button>
 
-
+{{-- 
 <div class=" flex justify-center sm:justify-end">
     <button
         type="button"
@@ -884,7 +908,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
         </svg>
     </button>
-</div>
+</div> --}}
 
 
 
