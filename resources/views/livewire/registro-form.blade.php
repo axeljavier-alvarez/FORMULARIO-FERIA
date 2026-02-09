@@ -114,7 +114,7 @@
         {{-- TÍTULO PRINCIPAL --}}
 <div class="mb-10 text-center">
     <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight uppercase">
-        Registro <span class="text-[#7F22FE]">Feria Empleo</span>
+        Registro <span class="text-[#7F22FE]">Feria De Empleo</span>
     </h1>
 
     <div class="mt-5 inline-flex items-center gap-3 rounded-full bg-emerald-50 px-6 py-2 border border-emerald-100 shadow-sm">
