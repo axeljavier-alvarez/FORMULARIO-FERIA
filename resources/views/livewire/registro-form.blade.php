@@ -185,7 +185,12 @@
 
                 <form wire:submit.prevent="submit" class="space-y-8">
                     @if($step === 1)
-
+                    {{-- <div class="mb-6 border-b border-slate-50 pb-4">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                            <span class="flex h-2 w-2 rounded-full bg-red-500"></span>
+                            Recuerda completar los campos marcados en rojo
+                        </p>
+                    </div> --}}
                     <div
                     wire:key="step-1-container"
                         class="space-y-6 animate-fadeIn"
@@ -676,85 +681,90 @@
 
 
 
-                        <div class="space-y-2">
-    <div class="flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
-        <span class="text-slate-700 font-medium text-sm">Hoja de Vida (PDF)</span>
-    </div>
+                     
 
-    
-@if(!$ruta || $errors->has('ruta'))
-    {{-- ESTADO: PARA CARGAR --}}
-    <div
-        class="group relative flex flex-col justify-center rounded-3xl border-2 border-dashed {{ $errors->has('ruta') ? 'border-red-300 bg-red-50/30' : 'border-slate-200 bg-blue-50/30' }} px-6 py-10 transition-all hover:border-[#7F22FE] hover:bg-[#F0F9FF]"
-        wire:loading.class="opacity-50 pointer-events-none"
-    >
-       <div class="text-center w-full">
-    {{-- Estado de Carga (Spinner) --}}
-    <div wire:loading wire:target="ruta" class="py-4">
-        <svg class="animate-spin h-8 w-8 text-[#7F22FE] mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        <p class="text-xs text-[#7F22FE] font-bold mt-2">Subiendo...</p>
-    </div>
-
-    {{-- Área de carga clicable --}}
-    <div wire:loading.remove wire:target="ruta">
-        <label class="cursor-pointer flex flex-col items-center justify-center w-full transition-opacity hover:opacity-70">
-            <input type="file" wire:model="ruta" class="sr-only" accept="application/pdf">
-
-            {{-- Icono --}}
-            <svg class="mx-auto h-12 w-12 {{ $errors->has('ruta') ? 'text-red-400' : 'text-[#7F22FE]' }} mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<div class="space-y-2">
+    {{-- Etiqueta Superior con Indicadores de Estado --}}
+    <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-
-            {{-- Texto de acción --}}
-            <span class="font-bold {{ $errors->has('ruta') ? 'text-red-600' : 'text-[#7F22FE]' }}">
-                Cargar archivo
-            </span>
-            
-            <p class="text-xs text-slate-400 mt-1">PDF máximo 2MB</p>
-            
-            @error('ruta')
-                <p class="text-xs text-red-600 font-bold mt-2 italic">{{ $message }}</p>
-            @enderror
-        </label>
-    </div>
-</div>
-    </div>
-@else
-    {{-- ESTADO: ARCHIVO CARGADO (Solo sale si hay ruta y NO hay errores) --}}
-    <div class="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-2xl p-4 animate-fadeIn">
-        <div class="flex items-center gap-3 truncate">
-            <svg class="h-8 w-8 text-emerald-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/>
-            </svg>
-            <div class="flex flex-col truncate">
-                <span class="text-sm font-bold text-slate-700 truncate">{{ $ruta->getClientOriginalName() }}</span>
-                <span class="text-[10px] text-emerald-600 font-bold uppercase">Listo para enviar</span>
-            </div>
+            <span>Hoja de Vida (PDF)</span>
         </div>
 
-        <button
-            type="button"
-            wire:click="removeFile"
-            class="p-2 hover:bg-red-100 rounded-full text-red-500 transition-colors"
-            title="Eliminar archivo"
-        >
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        {{-- Lógica de Iconos de Validación --}}
+        @if($ruta && !$errors->has('ruta'))
+            {{-- Icono VERDE: Archivo cargado correctamente --}}
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500 animate-bounce-short" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
-        </button>
-    </div>
-@endif
+        @else
+            {{-- Icono ROJO: Vacío o con Error --}}
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+        @endif
+    </label>
 
-    {{-- @error('ruta')
-        <span class="text-xs text-red-500 font-bold px-2">{{ $message }}</span>
-    @enderror --}}
+    {{-- Contenedor de Carga --}}
+    @if(!$ruta || $errors->has('ruta'))
+        <div class="group relative flex flex-col justify-center rounded-3xl border-2 border-dashed {{ $errors->has('ruta') ? 'border-red-300 bg-red-50/30' : 'border-slate-200 bg-blue-50/30' }} px-6 py-10 transition-all hover:border-[#7F22FE] hover:bg-[#F0F9FF]"
+             wire:loading.class="opacity-50 pointer-events-none">
+            
+            <div class="text-center w-full">
+                <div wire:loading wire:target="ruta" class="py-4">
+                    <svg class="animate-spin h-8 w-8 text-[#7F22FE] mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p class="text-xs text-[#7F22FE] font-bold mt-2">Subiendo...</p>
+                </div>
+
+                <div wire:loading.remove wire:target="ruta">
+                    <label class="cursor-pointer flex flex-col items-center justify-center w-full transition-opacity hover:opacity-70">
+                        <input type="file" wire:model="ruta" class="sr-only" accept="application/pdf">
+
+                        <svg class="mx-auto h-12 w-12 {{ $errors->has('ruta') ? 'text-red-400' : 'text-[#7F22FE]' }} mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+
+                        <span class="font-bold {{ $errors->has('ruta') ? 'text-red-600' : 'text-[#7F22FE]' }}">
+                            Cargar archivo
+                        </span>
+                        <p class="text-xs text-slate-400 mt-1">PDF máximo 2MB</p>
+                        
+                        @error('ruta')
+                            <p class="text-xs text-red-600 font-bold mt-2 italic">{{ $message }}</p>
+                        @enderror
+                    </label>
+                </div>
+            </div>
+        </div>
+    @else
+        <div class="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-3xl p-4 animate-fadeIn">
+            <div class="flex items-center gap-3 truncate">
+                <div class="bg-emerald-100 p-2 rounded-xl">
+                    <svg class="h-6 w-6 text-emerald-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/>
+                    </svg>
+                </div>
+                <div class="flex flex-col truncate">
+                    <span class="text-sm font-bold text-slate-700 truncate">{{ $ruta->getClientOriginalName() }}</span>
+                    <span class="text-[10px] text-emerald-600 font-bold uppercase tracking-tight">Archivo listo para enviar</span>
+                </div>
+            </div>
+
+            <button type="button" wire:click="removeFile" 
+                    class="p-2 hover:bg-red-100 rounded-full text-red-500 transition-colors group" title="Eliminar archivo">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    @endif
 </div>
+
 
                         
 
