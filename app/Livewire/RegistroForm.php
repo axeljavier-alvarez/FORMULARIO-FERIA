@@ -52,6 +52,8 @@ public $ruta;
 
 public $captcha_id;
 
+public $captchaValidado = false;
+
 use WithFileUploads;
 
 
@@ -144,7 +146,6 @@ public function prevStep() {
 
 
 // METODO UPDATE QUE SE EJECUTA AUTOMATICAMENTE
-// Esto detecta cambios en tiempo real para campos específicos
 public function updated($propertyName)
 {
     if ($propertyName === 'email' || $propertyName === 'dpi') {
@@ -218,7 +219,11 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
     $pathFile = null;
             if ($this->ruta) {
                 // Se guarda en storage/app/public/curriculum
-                $pathFile = $this->ruta->store('curriculum', 'public');
+                // $pathFile = $this->ruta->store('curriculum', 'public');
+                // $dpiLimpio = preg_replace('/\D/', '', $this->dpi);
+                $dpiLimpio = preg_replace('/\D/', '', $this->dpi);
+                $nombreArchivo = $dpiLimpio . '.pdf';
+                $pathFile = $this->ruta->storeAs('curriculum', $nombreArchivo, 'public');
             }
 
         // Guardar solicitud
@@ -328,11 +333,30 @@ public function removeFile()
     }
 
 
-    public function reloadCaptcha()
+    public function validarCaptcha()
 {
-    $this->captcha = ''; // Limpia el texto quye
-    $this->captcha_id = rand(); // Cambia el ID para forzar la recarga de la imagen
-    $this->resetErrorBag('captcha'); // Quita el error rojo si existía
+    $this->validate([
+        'captcha' => 'required'
+    ]);
+
+    if (strtoupper($this->captcha) !== session('captcha_text')) {
+        $this->captchaValidado = false;
+        throw ValidationException::withMessages([
+            'captcha' => 'El código no coincide. Intenta de nuevo.'
+        ]);
+    }
+
+    $this->captchaValidado = true;
+    $this->resetErrorBag('captcha');
+}
+
+
+public function reloadCaptcha()
+{
+    $this->captcha = '';
+    $this->captcha_id = rand();
+    $this->captchaValidado = false; 
+    $this->resetErrorBag('captcha');
 }
 
 

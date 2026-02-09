@@ -192,13 +192,14 @@
                         x-data="{
                           
                             paso1Valido() {
-            return ($wire.nombres?.length > 0) &&
+            {{-- return ($wire.nombres?.length > 0) &&
                    ($wire.apellidos?.length > 0) &&
                    ($wire.dpi?.replace(/\s/g,'').length === 13) &&
                    ($wire.sexo && $wire.sexo !== '') &&
                    ($wire.fechanac && $wire.fechanac !== '') &&
                    ($wire.email?.includes('@')) &&
-                   ($wire.telefono?.length === 9);
+                   ($wire.telefono?.length === 9); --}}
+                   return true;
         },
 
                             formatDPI(value) {
@@ -684,38 +685,45 @@
     </div>
 
     
-    {{-- Cambiamos la condición: Si no hay ruta O si hay un error en 'ruta' --}}
 @if(!$ruta || $errors->has('ruta'))
     {{-- ESTADO: PARA CARGAR --}}
     <div
         class="group relative flex flex-col justify-center rounded-3xl border-2 border-dashed {{ $errors->has('ruta') ? 'border-red-300 bg-red-50/30' : 'border-slate-200 bg-blue-50/30' }} px-6 py-10 transition-all hover:border-[#7F22FE] hover:bg-[#F0F9FF]"
         wire:loading.class="opacity-50 pointer-events-none"
     >
-        <div class="text-center">
-            <div wire:loading wire:target="ruta" class="mb-2">
-                <svg class="animate-spin h-8 w-8 text-[#7F22FE] mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <p class="text-xs text-[#7F22FE] font-bold">Subiendo...</p>
-            </div>
+       <div class="text-center w-full">
+    {{-- Estado de Carga (Spinner) --}}
+    <div wire:loading wire:target="ruta" class="py-4">
+        <svg class="animate-spin h-8 w-8 text-[#7F22FE] mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <p class="text-xs text-[#7F22FE] font-bold mt-2">Subiendo...</p>
+    </div>
 
-            <div wire:loading.remove wire:target="ruta">
-                <svg class="mx-auto h-12 w-12 {{ $errors->has('ruta') ? 'text-red-400' : 'text-[#7F22FE]' }} mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <label class="cursor-pointer font-bold {{ $errors->has('ruta') ? 'text-red-600' : 'text-[#7F22FE]' }}">
-                    Cargar archivo
-                    <input type="file" wire:model="ruta" class="sr-only" accept="application/pdf">
-                </label>
-                <p class="text-xs text-slate-400 mt-1">PDF máximo 2MB</p>
-                
-                {{-- Mensaje de Error --}}
-                @error('ruta')
-                    <p class="text-xs text-red-600 font-bold mt-2 italic">{{ $message }}</p>
-                @enderror
-            </div>
-        </div>
+    {{-- Área de carga clicable --}}
+    <div wire:loading.remove wire:target="ruta">
+        <label class="cursor-pointer flex flex-col items-center justify-center w-full transition-opacity hover:opacity-70">
+            <input type="file" wire:model="ruta" class="sr-only" accept="application/pdf">
+
+            {{-- Icono --}}
+            <svg class="mx-auto h-12 w-12 {{ $errors->has('ruta') ? 'text-red-400' : 'text-[#7F22FE]' }} mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+
+            {{-- Texto de acción --}}
+            <span class="font-bold {{ $errors->has('ruta') ? 'text-red-600' : 'text-[#7F22FE]' }}">
+                Cargar archivo
+            </span>
+            
+            <p class="text-xs text-slate-400 mt-1">PDF máximo 2MB</p>
+            
+            @error('ruta')
+                <p class="text-xs text-red-600 font-bold mt-2 italic">{{ $message }}</p>
+            @enderror
+        </label>
+    </div>
+</div>
     </div>
 @else
     {{-- ESTADO: ARCHIVO CARGADO (Solo sale si hay ruta y NO hay errores) --}}
@@ -759,47 +767,65 @@
         <label class="text-sm uppercase tracking-widest font-black text-amber-700">Verificación de Seguridad</label>
     </div>
     
-    <div class="flex flex-col items-center gap-8">
-        
-        <div class="relative group">
-            {{-- Recuadro blanco de la imagen --}}
-            <div class="bg-white p-4 rounded-3xl shadow-inner border-2 border-white w-[280px] h-[100px] flex justify-center items-center">
-                <img src="{{ url('/captcha') }}?t={{ $captcha_id }}" 
-                     alt="captcha" 
-                     class="rounded-xl w-full h-auto object-contain">
-            </div>
-
-            <button type="button" 
-                wire:click="reloadCaptcha" 
-                wire:loading.attr="disabled"
-                class="absolute -right-3 -bottom-3 p-3 bg-amber-600 text-white rounded-2xl hover:bg-amber-700 transition-all shadow-lg active:scale-90 disabled:opacity-50 border-4 border-amber-50"
-                title="Generar nuevo código">
-                
-                <svg wire:loading.class="animate-spin" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-            </button>
+    <div class="flex flex-col items-center gap-6"> <div class="relative group">
+        <div class="bg-white p-4 rounded-3xl shadow-inner border-2 border-white w-[280px] h-[100px] flex justify-center items-center">
+            <img src="{{ url('/captcha') }}?t={{ $captcha_id }}" 
+                 alt="captcha" 
+                 class="rounded-xl w-full h-auto object-contain">
         </div>
 
-        <div class="w-full max-w-[240px]">
-            <div class="relative">
-                <input type="text" 
-                    wire:model.defer="captcha"
-                    placeholder="CÓDIGO"
-                    class="w-full rounded-2xl border-4 {{ $errors->has('captcha') ? 'border-red-500 bg-red-50' : 'border-white bg-white' }} px-4 py-4 text-center text-2xl font-black tracking-[0.4em] text-slate-800 shadow-xl focus:border-amber-400 outline-none transition-all placeholder:text-slate-300 placeholder:tracking-normal placeholder:text-xs uppercase">
-                
-                @error('captcha')
-                    <div class="flex items-center justify-center gap-2 mt-4 text-red-600 animate-pulse text-center">
-                        <svg xmlns="http://www.w3.org/2000/center" class="h-4 w-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                        <span class="font-bold text-[10px] uppercase leading-tight">{{ $message }}</span>
-                    </div>
-                @enderror
-            </div>
-        </div>
-
+        <button type="button" 
+            wire:click="reloadCaptcha" 
+            class="absolute -right-3 -bottom-3 p-3 bg-amber-600 text-white rounded-2xl hover:bg-amber-700 shadow-lg active:scale-90 border-4 border-amber-50">
+            <svg wire:loading.class="animate-spin" wire:target="reloadCaptcha" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+        </button>
     </div>
+
+    <div class="w-full max-w-[240px] space-y-4">
+        <div class="relative">
+            {{-- Input de Captcha --}}
+            <input type="text" 
+                wire:model.defer="captcha"
+                placeholder="CÓDIGO"
+                {{ $captchaValidado ? 'disabled' : '' }}
+                class="w-full rounded-2xl border-4 {{ $captchaValidado ? 'border-green-500 bg-green-50 text-green-700' : ($errors->has('captcha') ? 'border-red-500 bg-red-50' : 'border-white bg-white') }} px-4 py-4 text-center text-2xl font-black tracking-[0.4em] shadow-xl outline-none transition-all uppercase">
+            
+            {{-- Icono de Éxito (Check) --}}
+            @if($captchaValidado)
+                <div class="absolute -right-2 -top-2 bg-green-500 text-white rounded-full p-1 shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+            @endif
+        </div>
+
+        {{-- BOTÓN VALIDAR (Solo se muestra si no está validado) --}}
+        @if(!$captchaValidado)
+            <button type="button" 
+                wire:click="validarCaptcha"
+                wire:loading.attr="disabled"
+                class="w-full py-3 bg-amber-600 text-white rounded-xl font-bold uppercase tracking-widest hover:bg-amber-700 transition-all shadow-md active:scale-95 disabled:opacity-50">
+                <span wire:loading.remove wire:target="validarCaptcha text-sm">Validar Código</span>
+                <span wire:loading wire:target="validarCaptcha text-sm">Verificando...</span>
+            </button>
+        @else
+            <p class="text-green-600 font-bold text-xs text-center uppercase tracking-tighter animate-bounce">
+                ✓ Captcha verificado correctamente
+            </p>
+        @endif
+
+        {{-- Mensaje de Error --}}
+        @error('captcha')
+            <div class="flex items-center justify-center gap-2 text-red-600 text-center">
+                <span class="font-bold text-[10px] uppercase leading-tight">{{ $message }}</span>
+            </div>
+        @enderror
+    </div>
+</div>
+
 </div>
 
                     </div>
@@ -819,7 +845,7 @@
 
 
                           
-                        <button
+                        {{-- <button
                             type="button"
                             wire:click="nextStep"
                             :disabled="!paso1Valido()"
@@ -830,10 +856,10 @@
                         >
                             <span wire:loading.remove wire:target="nextStep">Siguiente Paso</span>
                             <span wire:loading wire:target="nextStep">Validando datos...</span>
-                        </button>
+                        </button> --}}
 
 
-{{-- <div class=" flex justify-center sm:justify-end">
+<div class=" flex justify-center sm:justify-end">
     <button
         type="button"
         @click="if(paso1Valido()) { $wire.set('step', 2) }"
@@ -848,15 +874,26 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
         </svg>
     </button>
-</div> --}}
+</div>
 
 
 
                         @else
-                            <button type="submit"
-                                class="rounded-2xl bg-slate-900 px-12 py-4 text-sm font-bold text-white shadow-xl hover:bg-black hover:-translate-y-1 transition-all">
+                           
+                        <button type="submit"
+                            {{ !$captchaValidado ? 'disabled' : '' }}
+                            class="rounded-2xl px-12 py-4 text-sm font-bold text-white shadow-xl transition-all
+                            {{ $captchaValidado 
+                                ? 'bg-slate-900 hover:bg-black hover:-translate-y-1 cursor-pointer opacity-100' 
+                                : 'bg-slate-400 cursor-not-allowed opacity-60' }}">
+                            
+                            @if($captchaValidado)
                                 Completar Mi Registro
-                            </button>
+                            @else
+                                Valida el captcha para continuar
+                            @endif
+                        </button>
+
                         @endif
                     </div>
                 </form>
