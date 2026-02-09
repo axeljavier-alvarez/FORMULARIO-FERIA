@@ -27,7 +27,7 @@ public $telefono;
 public $dpi;
 public $sexo;
 public $fechanac;
-public $departamentos; 
+public $departamentos;
 public $departamento_id;
 // public $municipios;
 public $municipio_id;
@@ -52,17 +52,28 @@ public $captcha;
 
 
 public function nextStep() {
-    // // Validamos solo los campos del paso 1 antes de avanzar
+
+// quitar espacios a pi antes de validar
+    // if($this->dpi) {
+    //     $this->dpi = preg_replace('/\D/', '', $this->dpi);
+    // }
+
+    // quitar cualquier cosa que no sea numero y agregar prefijo
+    if($this->telefono){
+        $soloNumeros = preg_replace('/\D/', '', $this->telefono);
+        $this->telefono = '+502' . $soloNumeros;
+    }
+    // Validamos solo los campos del paso 1 antes de avanzar
     // $this->validate([
     //     'nombres' => 'required|string|max:100',
     //     'apellidos' => 'required|max:100',
     //     'email' => 'required|email',
-    //     'telefono' => 'required|string|min:5',
+    //     'telefono' => 'required|string|min:12|max:12',
     //     'dpi' => 'required|string|max:13',
     //     'sexo' => 'required',
     //     'fechanac' => 'required',
     // ]);
-    
+
     $this->step = 2;
 }
 
@@ -86,7 +97,7 @@ public function prevStep() {
     public function mount()
     {
 
-    
+
         $this->departamentos = Departamento::orderBy('nombre')->get();
 
         $this->departamento_id = 7;
@@ -127,10 +138,13 @@ public function prevStep() {
     public function submit()
 {
 
-
+// asegurarse que el telefono lleve +502
+if (!str_starts_with($this->telefono, '+502')) {
+        $this->telefono = '+502' . preg_replace('/\D/', '', $this->telefono);
+ }
 
 if (strtoupper($this->captcha) !== session('captcha_text')) {
-    throw \Illuminate\Validation\ValidationException::withMessages([
+    throw ValidationException::withMessages([
         'captcha' => 'Datos incorrectos del captcha'
     ]);
 }
@@ -155,25 +169,25 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
             'municipio_id' => $this->municipio_id,
             'zona' => $this->zona,
             'estado_id' => 1,
-            
+
         ]);
 
         // CREAR TOKEN PARA ACCESO
         $this->token = Str::random(40);
 
-      
+
 
 
         // $this->qrCodeData = QrCode::size(150)
-        //     ->color(0, 0, 0) 
-        //     ->margin(1)      
+        //     ->color(0, 0, 0)
+        //     ->margin(1)
         //     ->generate($this->token)
         //     ->toHtml();
 
         // guardar token en la bd y seguridad sha256
         $solicitud->accesos()->create([
             'token'      => hash('sha256', $this->token),
-            'expires_at' => now()->addDays(30) 
+            'expires_at' => now()->addDays(30)
         ]);
 
         $urlAcceso = route('feria.acceso', ['token' => $this->token]);
@@ -186,7 +200,7 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
 
 
           DB::commit();
-    
+
           // mostrar el modal si todo sale bien
         $this->showModal = true;
 
@@ -205,7 +219,7 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
             'zona',
         ]);
 
-       
+
         $this->showModal = true;
 
     } catch (\Throwable $e) {

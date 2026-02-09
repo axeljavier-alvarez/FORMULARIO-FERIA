@@ -27,16 +27,16 @@
 </head>
 
 <style>
-    [x-cloak] { 
-        display: none !important; 
+    [x-cloak] {
+        display: none !important;
     }
 </style>
 
 
-<body class="bg-slate-50">
+<body class="min-h-screen bg-[#F0F9FF] py-12 font-sans selection:bg-indigo-100">
 
 
-    
+
                 <livewire:registro-form />
 
 

@@ -4,9 +4,10 @@
 
 
 
-            <div 
-                x-data="{ 
-                    open: @entangle('showModal'), 
+            <div
+                x-data="{
+
+                    open: @entangle('showModal'),
                     descargado: false,
                     downloadQR() {
                         const svg = document.querySelector('#qr-container svg');
@@ -14,7 +15,7 @@
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
                         const img = new Image();
-                        
+
                         img.onload = () => {
                             canvas.width = img.width;
                             canvas.height = img.height;
@@ -28,13 +29,13 @@
                             downloadLink.click();
                             this.descargado = true; // Activa el botón de entendido
                         };
-                        
+
                         img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
                     }
                 }"
                 x-show="open"
                 x-transition
-                class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" 
+                class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
                 style="display: none;"
             >
 
@@ -45,11 +46,11 @@
                                 <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
-                            </div>    
+                            </div>
                         </div>
 
                         <h2 class="text-xl font-bold text-gray-900 mb-2">
-                        ¡Registro a Feria de empleo exitoso! 
+                        ¡Registro a Feria de empleo exitoso!
                         </h2>
                         <p x-show="!descargado" class="text-sm text-amber-600 font-medium mb-6">
                             <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,9 +75,9 @@
 
 
                         <div class="space-y-3">
-                            <button 
+                            <button
                                 x-show="!descargado"
-                                @click="downloadQR()" 
+                                @click="downloadQR()"
                                 type="button"
                                 class="w-full py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-all flex items-center justify-center gap-2"
                             >
@@ -86,7 +87,7 @@
                                 Descargar QR
                             </button>
 
-                            <button 
+                            <button
                             @click="open = false; $wire.set('step', 1)"
                                 :disabled="!descargado"
                                 :class="descargado ? 'bg-slate-900 hover:bg-black' : 'bg-slate-200 cursor-not-allowed text-slate-400'"
@@ -97,295 +98,510 @@
                         </div>
 
                 </div>
-                    
+
                 </div>
 
 
 
 
-    {{-- @if(session()->has('success'))
-<div class="rounded-lg bg-green-50 p-4 text-sm text-green-700">
-    {{ session('success') }}
-</div>
-@endif --}}
 
-{{-- @if(session()->has('success'))
-<div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" 
-     class="mb-4 rounded-lg bg-green-100 border border-green-300 px-4 py-2 text-green-800 font-medium">
-    {{ session('success') }}
-</div>
-@endif --}}
 
-<div class="mx-auto max-w-5xl px-4 py-8">
-    {{-- Indicador de Pasos --}}
-    <div class="mb-8 flex items-center justify-center gap-4">
-        <div class="flex items-center gap-2">
-            <span class="flex h-8 w-8 items-center justify-center rounded-full {{ $step === 1 ? 'bg-emerald-600 text-white' : 'bg-emerald-100 text-emerald-600' }} font-bold">1</span>
-            <span class="text-sm font-medium {{ $step === 1 ? 'text-emerald-900' : 'text-slate-500' }}">Datos Personales</span>
-        </div>
-        <div class="h-px w-12 bg-slate-200"></div>
-        <div class="flex items-center gap-2">
-            <span class="flex h-8 w-8 items-center justify-center rounded-full {{ $step === 2 ? 'bg-emerald-600 text-white' : 'bg-emerald-100 text-emerald-600' }} font-bold">2</span>
-            <span class="text-sm font-medium {{ $step === 2 ? 'text-emerald-900' : 'text-slate-500' }}">Ubicación y CV</span>
-        </div>
+                {{-- Fondo de la página con el color solicitado --}}
+
+
+    <div class="mx-auto max-w-4xl px-4">
+
+        {{-- TÍTULO PRINCIPAL --}}
+<div class="mb-10 text-center">
+    <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight uppercase">
+        Registro <span class="text-[#7F22FE]">Feria Empleo</span>
+    </h1>
+
+    <div class="mt-5 inline-flex items-center gap-3 rounded-full bg-emerald-50 px-6 py-2 border border-emerald-100 shadow-sm">
+        {{-- Indicador visual fijo --}}
+        <span class="relative flex h-3 w-3">
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+        </span>
+
+        <p class="text-sm md:text-base font-bold text-emerald-700 tracking-wide uppercase">
+            Postúlate hoy mismo y conecta con nuevas oportunidades
+        </p>
     </div>
 
+    <div class="mt-5 inline-flex items-center gap-3 rounded-full bg-amber-50 px-6 py-2 border border-amber-100 shadow-sm">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+    </svg>
 
-    <!-- ORILLAS DEL FORMULARIO -->
-    <div class="rounded-2xl
-border border-slate-300/50
-bg-white
-shadow-md
-overflow-hidden">
-
-        <div class="px-6 py-8 sm:px-10">
-
-   
-
-@if ($errors->any())
-<div class="mb-4 rounded-lg bg-red-50 border border-red-200 p-4 text-sm text-red-700">
-    Hay errores en el formulario. Verifica los campos marcados.
+    <p class="text-sm md:text-base font-bold text-amber-700 tracking-wide uppercase">
+        Recuerda ingresar tus datos correctamente
+    </p>
 </div>
-@endif
+
+</div>
 
 
-            <form wire:submit.prevent="submit" class="space-y-8">
-                
-                {{-- PASO 1: DATOS PERSONALES --}}
-                @if($step === 1)
-                <div class="space-y-6">
-                    <div>
-                        <h2 class="text-lg font-semibold text-slate-900">Información básica</h2>
-                        <p class="text-sm text-slate-500">Comencemos con tus datos de contacto.</p>
-                    </div>
+        {{-- Indicador de Pasos --}}
+        <nav class="mb-8" aria-label="Progress">
+            <ol class="flex items-center justify-center space-x-4 md:space-x-8">
+                <li class="flex items-center gap-3">
+                    <span class="flex h-10 w-10 items-center justify-center rounded-xl {{ $step === 1 ? 'bg-[#7F22FE] text-white shadow-lg' : 'bg-white text-[#7F22FE] border border-purple-100' }} font-bold transition-all">1</span>
+                    <span class="hidden sm:inline text-sm font-bold {{ $step === 1 ? 'text-slate-900' : 'text-slate-400' }}">Datos Personales</span>
+                </li>
+                <li class="h-px w-12 bg-slate-300"></li>
+                <li class="flex items-center gap-3">
+                    <span class="flex h-10 w-10 items-center justify-center rounded-xl {{ $step === 2 ? 'bg-[#7F22FE] text-white shadow-lg' : 'bg-white text-slate-400 border border-slate-200' }} font-bold transition-all">2</span>
+                    <span class="hidden sm:inline text-sm font-bold {{ $step === 2 ? 'text-slate-900' : 'text-slate-400' }}">Ubicación y CV</span>
+                </li>
+            </ol>
+        </nav>
 
-                  
+        {{-- FORMULARIO --}}
+        <div class="overflow-hidden rounded-[2rem] border border-white bg-white/80 backdrop-blur-sm shadow-2xl shadow-blue-900/10">
+            <div class="h-2 bg-gradient-to-r from-[#7F22FE] via-purple-400 to-[#F0F9FF]"></div>
 
-
-
-
-
-
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        {{-- Nombres --}}
-                        <div>
-                            <label class="text-sm font-medium text-slate-700">Nombres</label>
-                           <input
-                                type="text"
-                                wire:model.debounce.500ms="nombres"
-                                wire:keydown="resetError('nombres')"
-                                class="mt-2 w-full rounded-lg px-3 py-2 text-sm outline-none transition-all
-                                    border
-                                    @error('nombres')
-                                        border-red-500
-                                    @elseif(strlen($nombres ?? '') > 0)
-                                        mt-2 w-full rounded-lg px-3 py-2 text-sm outline-none transition-all
-        border border-slate-400/40
-
-        focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100
-                                    @else
-                                       mt-2 w-full rounded-lg px-3 py-2 text-sm outline-none transition-all
-        border border-slate-400/40
-        focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100
-                                    @enderror
-                                "
-                            >
-
-
-
-                        </div>
-                        {{-- Apellidos --}}
-                        <div>
-                            <label class="text-sm font-medium text-slate-700">Apellidos</label>
-                            <input type="text" wire:model.defer="apellidos" 
-                                class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all">
-                        </div>
-                    </div>
-
-                    {{-- DPI con estilo verde --}}
-                    <div>
-                        <label class="text-sm font-medium text-slate-700">DPI</label>
-                        <input type="text" wire:model.defer="dpi" placeholder="Número de DPI"
-                            class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all">
-                    </div>
-
-
-
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-sm font-medium text-slate-700">Sexo</label>
-                            
-                            {{-- <label class="text-sm font-medium text-slate-700">como aparece en tu DPI</label> --}}
-                            <select wire:model.defer="sexo" class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
-                                <option value="">Seleccionar</option>
-                                <option value="M">Masculino</option>
-                                <option value="F">Femenino</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-sm font-medium text-slate-700">Fecha de Nacimiento</label>
-                            <input type="date" wire:model.defer="fechanac" class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
-                        </div>
-                    </div>
-
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                         
-                      
-                    <div>
-                            <label class="text-sm font-medium text-slate-700">Email</label>
-                            <input type="email" wire:model.defer="email" class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
-                    </div>
-
-                         <div>
-                            <label class="text-sm font-medium text-slate-700">Teléfono</label>
-                            <input type="number" wire:model.defer="telefono" class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
-                        </div>
-                    </div>
-
-
+            <div class="px-6 py-10 sm:px-12">
+                @if ($errors->any())
+                <div class="mb-8 flex items-center gap-3 rounded-2xl bg-red-50 p-4 text-sm text-red-800 border border-red-100">
+                    <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                    <p class="font-medium">Faltan campos obligatorios por completar.</p>
                 </div>
                 @endif
 
-                {{-- PASO 2: UBICACIÓN Y CV --}}
-                @if($step === 2)
-                <div class="space-y-6">
-                    <div>
-                        <h2 class="text-lg font-semibold text-slate-900">Ubicación y Documentación</h2>
-                        <p class="text-sm text-slate-500">¿De dónde nos visitas y cuál es tu perfil?</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        {{-- Departamento --}}
-                        <div class="relative">
-                            <label class="text-sm font-medium text-slate-700">Departamento</label>
-                            <select wire:model.live="departamento_id" class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none appearance-none pr-10">
-                                @foreach($departamentos as $depto)
-                                    <option value="{{ $depto->id }}">{{ $depto->nombre }}</option>
-                                @endforeach
-                            </select>
-                            <div class="pointer-events-none absolute bottom-3 right-3 text-slate-400">
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            </div>
-                        </div>
-
-                        {{-- Municipio --}}
-                        <div>
-                            <label class="text-sm font-medium text-slate-700">Municipio</label>
-                            <select wire:model.defer="municipio_id" class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none disabled:bg-slate-50" {{ empty($municipios) ? 'disabled' : '' }}>
-                                <option value="">Selecciona municipio</option>
-                                @foreach($municipios as $muni)
-                                    <option value="{{ $muni->id }}">{{ $muni->nombre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                      <div>
-                            <label class="text-sm font-medium text-slate-700">Zona</label>
-                            <input type="number" wire:model.defer="zona" class="mt-2 w-full rounded-lg border border-slate-400/40 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none">
-                        </div>
-
-
-                    {{-- Sobre Mí --}}
-                    <div>
-                        <label class="text-sm font-medium text-slate-700">Cuéntanos de ti</label>
-                        <textarea wire:model.defer="sobre_mi" rows="3" class="mt-2 w-full rounded-lg border border-slate-400/40 px-3 py-2 text-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all" placeholder="Breve resumen de tu perfil profesional..."></textarea>
-                    </div>
-
-                    {{-- DROPZONE PARA PDF (Simulado) --}}
-                    <div>
-                        <label class="text-sm font-medium text-slate-700">Adjuntar CV (Únicamente PDF, máx. 5MB)</label>
-                        <div class="mt-2 flex justify-center rounded-lg border-2 border-dashed border border-slate-400/40 px-6 py-10 hover:border-emerald-500 hover:bg-emerald-50 transition-colors group">
-                            <div class="text-center">
-                                <svg class="mx-auto h-12 w-12 text-slate-400 group-hover:text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                <div class="mt-4 flex text-sm leading-6 text-slate-600">
-                                    <label class="relative cursor-pointer rounded-md font-semibold text-emerald-600 focus-within:outline-none hover:text-emerald-500">
-                                        <span>Cargar archivo</span>
-                                        <input type="file" class="sr-only" accept="application/pdf">
-                                    </label>
-                                    <p class="pl-1">o arrastrar y soltar</p>
-                                </div>
-                                <p class="text-xs leading-5 text-slate-500">PDF hasta 5MB</p>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    
-                    <div class="mt-4">
-                            <label class="text-sm font-medium text-slate-700">
-                                Verificación de seguridad
-                            </label>
-
-                            <div class="flex items-center gap-3 mt-2">
-                                <img
-                                    src="{{ url('/captcha') }}"
-                                    alt="captcha"
-                                    class="rounded-lg border"
-                                >
-
-                                <button
-                                    type="button"
-                                    onclick="this.previousElementSibling.src='{{ url('/captcha') }}?'+Math.random()"
-                                    class="text-sm text-violet-600 hover:underline"
-                                >
-                                    Cambiar imagen
-                                </button>
-                            </div>
-
-                            <input
-                                type="text"
-                                wire:model.defer="captcha"
-                                placeholder="Ingrese el texto"
-                                class="mt-3 w-full rounded-lg border border-slate-400/40 px-3 py-2 text-sm focus:border-violet-500 focus:ring-violet-100 outline-none"
-                            >
-                        </div>
-
-                </div>
-                @endif
-
-                {{-- FOOTER BUTTONS --}}
-                <div class="flex flex-col-reverse gap-3 pt-6 sm:flex-row sm:items-center sm:justify-between">
-                    @if($step === 2)
-                        <button type="button" wire:click="prevStep" class="inline-flex items-center justify-center rounded-lg border border-slate-400/40 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
-                            Anterior
-                        </button>
-                    @else
-                        <div></div> {{-- Espaciador --}}
-                    @endif
-
+                <form wire:submit.prevent="submit" class="space-y-8">
                     @if($step === 1)
-                       <button
-                            type="button"
-                            wire:click="nextStep"
-                            class="
-                                inline-flex items-center justify-center rounded-lg
-                                bg-[#7F41FF]
-                                px-6 py-2 text-sm font-semibold text-white shadow-sm
-                                hover:bg-[#9B6BFF]
-                                focus:outline-none
-                                focus:ring-4 focus:ring-[#E5D9FF]
-                                active:bg-[#6A2FFF]
-                                transition-all
-                            "
-                        >
-                            Siguiente paso
-                        </button>
 
-                    @else
-                        <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-8 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200 transition-all">
-                            Completar Registro
-                        </button>
-                    @endif
-                </div>
-            </form>
+                    <div
+                        class="space-y-6 animate-fadeIn"
+                        x-data="{
+                            nombres: '',
+                            apellidos: '',
+                            dpi: '',
+                            genero: '',
+                            fecha: '',
+                            correo: '',
+                            telefono: '',
+
+                            paso1Valido() {
+                                return this.nombres.length > 0 &&
+                                    this.apellidos.length > 0 &&
+                                    this.dpi.replace(/\s/g,'').length === 13 &&
+                                    this.genero !== '' &&
+                                    this.fecha !== '' &&
+                                    this.correo.includes('@') &&
+                                    this.telefono.length === 9;
+                            },
+
+                            formatDPI(value) {
+                                    let v = value.replace(/\D/g, '').substring(0, 13);
+
+                                    if (v.length > 9) {
+                                        return `${v.slice(0, 4)} ${v.slice(4, 9)} ${v.slice(9)}`;
+                                    }
+
+                                    if (v.length > 4) {
+                                        return `${v.slice(0, 4)} ${v.slice(4)}`;
+                                    }
+
+                                    return v;
+                                },
+
+                                formatTel(value) {
+                                    let v = value.replace(/\D/g, '').substring(0, 8);
+
+                                    if (v.length > 4) {
+                                        return `${v.slice(0, 4)}-${v.slice(4)}`;
+                                    }
+
+                                    return v;
+                                },
+
+
+                            formatTel(value) {
+                                let val = value.replace(/\D/g,'').substring(0,8);
+                                return val.length > 4 ? `${val.substring(0,4)}-${val.substring(4)}` : val;
+                            }
+                        }"
+                    >
+
+
+                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                <div class="space-y-2">
+                                    <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
+                                    <div class="flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
+                                        <span>Nombres</span>
+                                    </div>
+
+                                    <template x-if="nombres.length > 0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                    </template>
+
+                                    <template x-if="nombres.length === 0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </template>
+                                    </label>
+
+                                    <input type="text"
+                                        x-model="nombres"
+                                        wire:model.defer="nombres"
+                                        class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 text-slate-900 transition-all focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border"
+                                        placeholder="Ingresa tus nombres">
+                                </div>
+
+                                <div class="space-y-2">
+                                    <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
+                                        <div class="flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0" />
+                                            </svg>
+                                            <span>Apellidos</span>
+                                        </div>
+
+                                        <template x-if="apellidos.length > 0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        </template>
+
+                                        <template x-if="apellidos.length === 0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                        </template>
+
+
+                                    </label>
+                                    <input type="text"
+                                        x-model="apellidos"
+                                        wire:model.defer="apellidos"
+                                        class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 text-slate-900 transition-all focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border border-slate-100"
+                                        placeholder="Ingresa tus apellidos">
+                                </div>
+                            </div>
+
+
+                            <div class="space-y-2">
+
+                <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                        </svg>
+                        <span>DPI / Identificación</span>
+                    </div>
+
+                    <template x-if="dpi.length > 0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                    </template>
+
+                    <template x-if="dpi.length === 0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </template>
+                </label>
+
+    <input
+    type="text"
+    x-model="dpi"
+    x-on:input="dpi = formatDPI($event.target.value)"
+    wire:model.defer="dpi"
+    placeholder="0000 00000 0000"
+    class="w-full rounded-2xl bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border font-mono transition-all"
+    :class="dpi.replace(/\s/g,'').length === 13 ? 'border-slate-100' : 'border-slate-100'"
+    @blur="$wire.set('dpi', dpi.replace(/\s/g, ''))"
+>
+
+</div>
+
+
+                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <div class="space-y-2">
+
+                                 <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
+                                        <div class="flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                            </svg>
+                                            <span>Género</span>
+                                        </div>
+                                        <template x-if="genero.length > 0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        </template>
+
+                                        <template x-if="genero.length === 0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                        </template>
+                                    </label>
+
+                                <select wire:model.defer="sexo"
+                                x-model="genero"
+                                class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Femenino</option>
+                                </select>
+                            </div>
+
+                           <div class="space-y-2"> <label class="flex justify-between items-center mx-1">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+
+            <span class="text-xs uppercase tracking-wider font-black text-slate-500">Fecha de nacimiento</span>
+
+            <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-0.5 rounded-full font-bold border border-yellow-200">
+                INGRESAR LA DE TU DPI
+            </span>
         </div>
+
+        <div>
+            <template x-if="fecha.length > 0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+            </template>
+
+            <template x-if="fecha.length === 0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+            </template>
+        </div>
+    </label>
+
+    <input type="date"
+        wire:model.defer="fechanac"
+        x-model="fecha"
+        class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border transition-all text-slate-600"
+        :class="fecha.length > 0 ? 'border-emerald-500/50' : 'border-slate-100'"
+    >
+</div>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <div class="space-y-2">
+                                <label class="flex justify-between items-center text-xs uppercase tracking-wider
+                                font-black text-slate-500 mx-1">
+
+                                <div class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                    <span>Correo electrónico</span>
+                                </div>
+
+                                       <template x-if="correo.length > 0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+            </template>
+
+            <template x-if="correo.length === 0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+            </template>
+                                </label>
+                                    <input type="email" wire:model.defer="email"
+                                    x-model="correo" placeholder="ejemplo@correo.com" class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border">
+                                </div>
+
+
+                                <div class="space-y-2">
+    <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+            <span>Teléfono</span>
+        </div>
+
+        <template x-if="telefono.length === 9">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+        </template>
+
+        <template x-if="telefono.length !== 9">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+        </template>
+    </label>
+
+    <div class="relative flex items-center">
+        <div class="absolute left-4 flex items-center gap-2 pointer-events-none border-r pr-2 border-slate-200">
+            <img src="https://flagcdn.com/w20/gt.png" srcset="https://flagcdn.com/w40/gt.png 2x" width="20" alt="Guatemala">
+            <span class="text-slate-500 font-bold text-sm">+502</span>
+        </div>
+
+        <input type="text"
+            x-model="telefono"
+            x-on:input="telefono = formatTel($event.target.value)"
+            wire:model.defer="telefono"
+            placeholder="0000-0000"
+            class="w-full rounded-2xl border-slate-100 bg-slate-50 pl-24 pr-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border transition-all font-mono"
+            >
     </div>
 </div>
 
-    
+                    </div>
+                    @endif
+
+                    @if($step === 2)
+                    <div class="space-y-6 animate-fadeIn">
+                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                            <div class="space-y-2">
+
+                                <div class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                                    </svg>
+                                    <span class="text-slate-700 font-medium">Departamento</span>
+                                </div>
+
+
+
+                                <select wire:model.live="departamento_id" class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 border outline-none">
+                                    @foreach($departamentos as $depto)
+                                        <option value="{{ $depto->id }}">{{ $depto->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                    <span class="text-slate-700 font-medium">Municipio</span>
+                                </div>
+
+                                <select wire:model.defer="municipio_id" class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 border outline-none disabled:opacity-50" {{ empty($municipios) ? 'disabled' : '' }}>
+                                    <option value="">Selecciona municipio</option>
+                                    @foreach($municipios as $muni)
+                                        <option value="{{ $muni->id }}">{{ $muni->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+    </svg>
+    <span class="text-slate-700 font-medium">Zona 12</span>
+</div>
+                                <input type="number" wire:model.defer="zona" class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 border outline-none focus:border-[#7F22FE]">
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+    </svg>
+
+                                <span class="text-slate-700 font-medium text-sm">Perfil Profesional (Sobre ti)</span>
+                            </div>
+
+                            <textarea wire:model.defer="sobre_mi" rows="3" class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] border outline-none" placeholder="Breve resumen de tu experiencia..."></textarea>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <span class="text-slate-700 font-medium text-sm">Hoja de Vida (PDF)</span>
+                            </div>
+
+                            <div class="group relative flex justify-center rounded-3xl border-2 border-dashed border-slate-200 bg-blue-50/30 px-6 py-10 transition-all hover:border-[#7F22FE] hover:bg-[#F0F9FF]">
+                                <div class="text-center">
+                                    <svg class="mx-auto h-12 w-12 text-[#7F22FE] mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    <label class="cursor-pointer font-bold text-[#7F22FE]">Cargar archivo <input type="file" class="sr-only" accept="application/pdf"></label>
+                                    <p class="text-xs text-slate-400 mt-1">Máximo 5MB</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rounded-[2rem] bg-gradient-to-br from-amber-50 to-orange-50 p-8 border-2 border-amber-200 shadow-xl shadow-amber-100">
+                                <label class="text-sm uppercase tracking-widest font-black text-amber-700 block mb-4 text-center">🔐 Verificación de Seguridad</label>
+                                <div class="flex flex-col items-center gap-6">
+                                    <div class="bg-white p-4 rounded-2xl shadow-inner border-2 border-white scale-110 md:scale-125">
+                                        <img src="{{ url('/captcha') }}" alt="captcha" class="rounded-lg">
+                                    </div>
+                                    <div class="w-full max-w-md">
+                                        <input type="text" wire:model.defer="captcha"
+                                            placeholder="INGRESA EL CÓDIGO AQUÍ"
+                                            class="w-full rounded-2xl border-4 border-white bg-white px-6 py-5 text-center text-2xl font-black tracking-[0.5em] text-slate-800 shadow-2xl focus:border-amber-400 outline-none transition-all placeholder:text-slate-300 placeholder:tracking-normal placeholder:text-sm">
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    @endif
+
+                    {{-- BOTONES ACCIÓN --}}
+                    <div class="flex flex-col-reverse gap-4 pt-8 sm:flex-row sm:items-center sm:justify-between border-t border-slate-50">
+                        @if($step === 2)
+                            <button type="button" wire:click="prevStep" class="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-8 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all">
+                                Volver
+                            </button>
+                        @else
+                            <div class="hidden sm:block"></div>
+                        @endif
+
+                        @if($step === 1)
+
+
+                            <button
+    type="button"
+    @click="if(paso1Valido()) { $wire.set('step', 2) }"
+    :disabled="!paso1Valido()"
+    class="w-full py-4 rounded-2xl font-bold transition-all shadow-lg"
+    :class="paso1Valido()
+        ? 'bg-[#7F22FE] text-white hover:bg-purple-700 shadow-purple-200'
+        : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'"
+>
+    Siguiente Paso
+</button>
+
+
+                        @else
+                            <button type="submit"
+                                class="rounded-2xl bg-slate-900 px-12 py-4 text-sm font-bold text-white shadow-xl hover:bg-black hover:-translate-y-1 transition-all">
+                                Completar Mi Registro
+                            </button>
+                        @endif
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+ </div>
+<style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+</style>
+
+
+
 </div>
