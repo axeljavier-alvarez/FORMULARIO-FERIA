@@ -50,6 +50,7 @@ public $captcha;
 
 public $ruta;
 
+public $captcha_id;
 
 use WithFileUploads;
 
@@ -71,9 +72,20 @@ public function nextStep() {
     $this->validate([
         'nombres' => 'required|string|max:100',
         'apellidos' => 'required|max:100',
-        'email' => 'required|email',
+
+        'email' => [
+        'required',
+        'email',
+        Rule::unique('solicitudes', 'email'),
+        ],
+
         'telefono' => 'required|string|min:12|max:12',
-        'dpi' => 'required|string|max:13',
+        'dpi' => [
+        'required',
+        'dpi',
+        Rule::unique('solicitudes', 'dpi'),
+        ],
+        
         'sexo' => 'required',
         'fechanac' => 'required',
     ]);
@@ -109,11 +121,21 @@ public function prevStep() {
         $this->municipios = Municipio::where('departamento_id', 7)->get();
 
         $this->municipio_id = 74;
+
+        $this->captcha_id = rand();
+
     }
 
     public function updatedRuta()
 {
-    $this->validateOnly('ruta');
+    try {
+        $this->validateOnly('ruta');
+    } catch (ValidationException $e) {
+        // Si falla, reseteamos la propiedad para que el input file se limpie
+        $this->ruta = null;
+        // Lanzamos el error para que Livewire lo capture y lo muestre en el Blade
+        throw $e;
+    }
 }
 
     protected function messages()
@@ -131,8 +153,21 @@ public function prevStep() {
             'sobre_mi'  => 'string|max:1000',
             'nombres' => 'required|string|max:100',
             'apellidos' => 'required|max:100',
-            'email' => 'required|email',
+
+            'email' => [
+            'required',
+            'email',
+            Rule::unique('solicitudes', 'email'),
+            ],
+        
             'telefono' => 'required|string|min:5',
+
+            'dpi' => [
+        'required',
+        'dpi',
+        Rule::unique('solicitudes', 'dpi'),
+        ],
+        
             'dpi' => 'required|string|max:13',
             'sexo' => 'required|string',
             'fechanac' => 'required|string',
@@ -246,7 +281,7 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
         ]);
 
 
-        $this->showModal = true;
+        // $this->showModal = true;
 
     } catch (\Throwable $e) {
         DB::rollBack();
@@ -261,6 +296,15 @@ public function removeFile()
     {
         $this->ruta = null;
     }
+
+
+    public function reloadCaptcha()
+{
+    $this->captcha = ''; // Limpia el texto quye
+    $this->captcha_id = rand(); // Cambia el ID para forzar la recarga de la imagen
+    $this->resetErrorBag('captcha'); // Quita el error rojo si existía
+}
+
 
 
 }

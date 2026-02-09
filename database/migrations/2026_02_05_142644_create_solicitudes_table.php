@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('sobre_mi', 1000)->nullable();
             $table->string('nombres', 100);
             $table->string('apellidos', 100);
-            $table->string('email', 50);
+            $table->string('email', 50)->unique();
             $table->string('telefono', 20);
-            $table->string('dpi', 15);
+            $table->string('dpi', 15)->unique();
             $table->char('sexo', 1);
             $table->date('fechanac');
             $table->foreignId('municipio_id')->constrained('municipios')->restrictOnDelete();
