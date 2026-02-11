@@ -111,34 +111,36 @@
 
     <div class="mx-auto max-w-4xl px-4">
 
-        {{-- TÍTULO PRINCIPAL --}}
-<div class="mb-10 text-center">
-    <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight uppercase">
-        Registro <span class="text-[#7F22FE]">Feria De Empleo</span>
-    </h1>
+        <div class="mb-10 text-center">
+            <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight uppercase">
+                Formulario de registro 
+            </h1>
 
-    <div class="mt-5 inline-flex items-center gap-3 rounded-full bg-emerald-50 px-6 py-2 border border-emerald-100 shadow-sm">
-        {{-- Indicador visual fijo --}}
-        <span class="relative flex h-3 w-3">
-            <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-        </span>
+            <div class="mt-5 inline-flex items-center gap-3 rounded-full bg-emerald-50 px-6 py-2 border border-emerald-200 shadow-md">
+                <p class="text-sm md:text-base font-bold text-emerald-700 tracking-wide uppercase">
+                    Megaferia del empleo
+                </p>
+            </div>
 
-        <p class="text-sm md:text-base font-bold text-emerald-700 tracking-wide uppercase">
-            Postúlate hoy mismo y conecta con nuevas oportunidades
-        </p>
-    </div>
+            <div class="mt-4 flex justify-center">
+                <div class="inline-flex items-center gap-2 rounded-full bg-yellow-100 px-5 py-2 border border-yellow-200 shadow-sm">
+                    
+                    <svg xmlns="http://www.w3.org/2000/svg" 
+                        class="h-4 w-4 text-red-600" 
+                        viewBox="0 0 20 20" 
+                        fill="currentColor">
+                        <path fill-rule="evenodd" 
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" 
+                            clip-rule="evenodd" />
+                    </svg>
 
-    <div class="mt-5 inline-flex items-center gap-3 rounded-full bg-amber-50 px-6 py-2 border border-amber-100 shadow-sm">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-    </svg>
+                    <p class="text-sm font-semibold text-red-700 tracking-wide">
+                    Los campos con alerta son requeridos
+                    </p>
+                </div>
+            </div>
+        </div>
 
-    <p class="text-sm md:text-base font-bold text-amber-700 tracking-wide uppercase">
-        Recuerda ingresar tus datos correctamente
-    </p>
-</div>
-
-</div>
 
 
         {{-- Indicador de Pasos --}}
@@ -146,9 +148,13 @@
         <nav class="mb-8" aria-label="Progress">
             <ol class="flex items-center justify-center space-x-4 md:space-x-8">
                 <li class="flex items-center gap-3">
-                    <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl {{ $step === 1 ? 'bg-[#7F22FE] text-white shadow-lg' : 'bg-white text-[#7F22FE] border border-purple-100' }} font-bold transition-all">1</span>
+                    <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl {{ $step === 1 ? 'bg-[#070F9E] text-white shadow-lg' : 'bg-white text-[#7F22FE] border border-purple-100' }} font-bold transition-all">1</span>
                     <span class="text-xs sm:text-sm font-bold {{ $step === 1 ? 'text-slate-900' : 'text-slate-400' }}">Datos Personales</span>
                 </li>
+
+
+                <!-- -->
+                
 
                 <li class="h-px w-6 md:w-12 bg-slate-300"></li>
 
@@ -162,12 +168,12 @@
 
         {{-- FORMULARIO --}}
         <div class="overflow-hidden rounded-[2rem] border border-white bg-white/80 backdrop-blur-sm shadow-2xl shadow-blue-900/10">
-            <div class="h-2 bg-gradient-to-r from-[#7F22FE] via-purple-400 to-[#F0F9FF]"></div>
+            <div class="h-2 bg-gradient-to-r from-[#070F9E] via-[#2563EB] to-[#93C5FD]"></div>
 
             <div class="px-6 py-10 sm:px-12">
 
 
-
+{{-- 
                 @if($errors->has('dpi') || $errors->has('email'))
            <div class="mb-8 flex items-center gap-3 rounded-2xl bg-amber-50 p-4 text-sm text-amber-800 border border-amber-200">
         <svg class="h-5 w-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
@@ -176,16 +182,16 @@
         <div>
             <p class="font-black uppercase text-xs">Algunos campos que registraste ya existen</p>
         </div>
-    </div>
+    </div> --}}
 
-    @elseif(collect($errors->messages())->except('ruta')->isNotEmpty())
+    {{-- @if(collect($errors->messages())->except('ruta')->isNotEmpty())
         <div class="mb-8 flex items-center gap-3 rounded-2xl bg-red-50 p-4 text-sm text-red-800 border border-red-100">
             <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
             </svg>
             <p class="font-medium">Por favor, completa todos los campos obligatorios correctamente.</p>
         </div>
-    @endif
+    @endif --}}
 
                 <form wire:submit.prevent="submit" class="space-y-8">
                     @if($step === 1)
@@ -295,76 +301,78 @@
 
                                 <input type="text"
                                     wire:model.live="nombres" 
-                                    class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 text-slate-900 transition-all focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border"
+                                    class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 transition-all border outline-none focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
                                     placeholder="Ingresa tus nombres">
                             </div>
 
                                 
                             <div class="space-y-2">
-    <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
-        <div class="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0" />
-            </svg>
-            <span>Apellidos</span>
-        </div>
+                            <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0" />
+                                </svg>
+                                <span>Apellidos</span>
+                            </div>
 
-        <template x-if="$wire.apellidos?.length > 0">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-        </template>
+                                <template x-if="$wire.apellidos?.length > 0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                </template>
 
-        <template x-if="!$wire.apellidos || $wire.apellidos.length === 0">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-            </svg>
-        </template>
-    </label>
+                                <template x-if="!$wire.apellidos || $wire.apellidos.length === 0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </template>
+                            </label>
 
-    <input type="text"
-        wire:model.live.debounce.250ms="apellidos"
-        class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 text-slate-900 transition-all focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border border-slate-100"
-        placeholder="Ingresa tus apellidos">
-</div>
+                            <input type="text"
+                                wire:model.live.debounce.250ms="apellidos"
+                                class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 transition-all border outline-none
+                        focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
+                                placeholder="Ingresa tus apellidos">
+                    </div>
 
                             </div>
 
 
                           
                             <div class="space-y-2">
-    <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
-        <div class="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
-            </svg>
-            <span>DPI / Identificación</span>
-        </div>
+                                <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
+                                    <div class="flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                                        </svg>
+                                        <span>DPI / Identificación</span>
+                                    </div>
 
-        <template x-if="cuiValido($wire.dpi)">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-        </template>
+                                    <template x-if="cuiValido($wire.dpi)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                    </template>
 
-        <template x-if="!cuiValido($wire.dpi)">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-            </svg>
-        </template>
-    </label>
+                                    <template x-if="!cuiValido($wire.dpi)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </template>
+                                </label>
 
-    <input
-        type="text"
-        wire:model.live="dpi"
-        placeholder="0000 00000 0000"
-        maxlength="15"
-        x-on:focus="$el.value = formatDPI($el.value)"
-        x-on:input="$el.value = formatDPI($el.value)"
-        x-on:blur="$el.value = $el.value.replace(/\D/g, '')"
-        class="w-full rounded-2xl bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border font-mono transition-all border-slate-100 text-slate-900"
-    >
-</div>
+                                <input
+                                    type="text"
+                                    wire:model.live="dpi"
+                                    placeholder="0000 00000 0000"
+                                    maxlength="15"
+                                    x-on:focus="$el.value = formatDPI($el.value)"
+                                    x-on:input="$el.value = formatDPI($el.value)"
+                                    x-on:blur="$el.value = $el.value.replace(/\D/g, '')"
+                                    class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 transition-all border outline-none
+                            focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
+                                >
+                            </div>
 
 
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -391,7 +399,7 @@
                                     </label>
 
                                     <select wire:model.live="sexo"
-                                        class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border text-slate-900">
+                                        class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 transition-all border outline-none focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100">
                                         <option value="">Seleccionar...</option>
                                         <option value="M">Masculino</option>
                                         <option value="F">Femenino</option>
@@ -430,7 +438,7 @@
 
                                         <input type="date"
                                             wire:model.live="fechanac"
-                                            class="w-full rounded-2xl bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border transition-all text-slate-600"
+                                            class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 transition-all border outline-none focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
                                             :class="$wire.fechanac ? 'border-slate-100' : 'border-slate-100'"
                                         >
                             </div>
@@ -465,7 +473,10 @@
     <input type="email" 
         wire:model.debounce.300ms="email"
         placeholder="ejemplo@correo.com" 
-        class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border text-slate-900 transition-all">
+                                            class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 transition-all border outline-none focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
+                                    class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 transition-all border outline-none focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
+
+>
 </div>
 
 
@@ -503,7 +514,11 @@
             wire:model.live="telefono"
             placeholder="0000-0000"
             maxlength="9"
-            class="w-full rounded-2xl border-slate-100 bg-slate-50 pl-24 pr-4 py-4 focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100 outline-none border transition-all font-mono text-slate-900"
+            class="w-full rounded-2xl border-slate-200 bg-slate-50 pl-24 pr-4 py-4 
+text-slate-900 transition-all border outline-none font-mono
+focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
+
+       
         >
     </div>
 </div>
@@ -879,18 +894,19 @@
 
 
                           
+                      
                         <button
-                            type="button"
-                            wire:click="nextStep"
-                            :disabled="!paso1Valido()"
-                            class="flex items-center justify-center gap-2 rounded-2xl py-4 px-12 font-bold transition-all shadow-lg w-full sm:w-auto"
-                            :class="paso1Valido() 
-                                ? 'bg-[#7F22FE] text-white hover:bg-purple-700 shadow-purple-200' 
-                                : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'"
-                        >
-                            <span wire:loading.remove wire:target="nextStep">Siguiente Paso</span>
-                            <span wire:loading wire:target="nextStep">Validando datos...</span>
-                        </button>
+    type="button"
+    wire:click="nextStep"
+    :disabled="!paso1Valido()"
+    class="flex items-center justify-center gap-2 rounded-2xl py-4 px-12 font-bold transition-all shadow-lg w-full sm:w-auto"
+    :class="paso1Valido() 
+        ? 'bg-[#070F9E] text-white hover:bg-[#0A1172] shadow-blue-200' 
+        : 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'"
+>
+    <span wire:loading.remove wire:target="nextStep">Siguiente Paso</span>
+    <span wire:loading wire:target="nextStep">Validando datos...</span>
+</button>
 
 {{-- 
 <div class=" flex justify-center sm:justify-end">
