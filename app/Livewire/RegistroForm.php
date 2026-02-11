@@ -215,9 +215,6 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
     ]);
 }
 
-
-
-
     // $this->telefono = preg_replace('/\D/', '', $this->telefono); 
     // $this->dpi = preg_replace('/\D/', '', $this->dpi);
 
@@ -266,8 +263,6 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
 
         // CREAR TOKEN PARA ACCESO
         $this->token = Str::random(40);
-
-
 
 
         // $this->qrCodeData = QrCode::size(150)
