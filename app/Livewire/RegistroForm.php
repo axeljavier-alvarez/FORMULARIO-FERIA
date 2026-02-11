@@ -58,12 +58,14 @@ use WithFileUploads;
 
 
 
+
+
 public function nextStep() {
     $this->validate([
         'nombres' => 'required|string|max:100',
         'apellidos' => 'required|max:100',
         'email' => ['required', 'email', Rule::unique('solicitudes', 'email')],
-        'telefono' => 'required|string|min:9|max:9', // Acepta 1234-5678
+        'telefono' => 'required|string|size:9',
         'dpi' => ['required', 'string', 'min:13', 'max:15', Rule::unique('solicitudes', 'dpi')], // Acepta espacios
         'sexo' => 'required',
         'fechanac' => 'required',
@@ -123,6 +125,17 @@ public function prevStep() {
         'ruta.mimes' => 'El formato debe ser obligatoriamente un PDF.',
         'ruta.required' => 'Debes adjuntar tu hoja de vida.',
         'ruta.file' => 'El archivo no se cargó correctamente.',
+
+         // Mensajes de DPI y email
+        'dpi.unique' => 'Este DPI ya está registrado.',
+        'dpi.required' => 'El DPI es obligatorio.',
+        'email.unique' => 'Este correo ya está registrado.',
+        'email.required' => 'El correo es obligatorio.',
+        'email.email'    => 'Escriba su correo electrónico completo.',
+
+        'telefono.required' => 'El teléfono es obligatorio.',
+        'telefono.size'     => 'El teléfono debe tener 8 números.',
+        
     ];
 }
    protected function rules()
@@ -132,8 +145,7 @@ public function prevStep() {
         'nombres' => 'required|string|max:100',
         'apellidos' => 'required|max:100',
         'email' => ['required', 'email', Rule::unique('solicitudes', 'email')],
-        // Estas reglas deben coincidir con lo que el usuario escribe (con guion y espacios)
-        'telefono' => 'required|string|min:9|max:9', 
+        'telefono' => 'required|string|max:8', 
         'dpi' => ['required', 'string', 'min:13', 'max:15', Rule::unique('solicitudes', 'dpi')],
         'sexo' => 'required|string',
         'fechanac' => 'required|string',
@@ -145,19 +157,22 @@ public function prevStep() {
 }
 
 
-// METODO UPDATE QUE SE EJECUTA AUTOMATICAMENTE
-public function updated($propertyName)
-{
-    if ($propertyName === 'email' || $propertyName === 'dpi') {
-        $this->validateOnly($propertyName, [
-            'email' => ['required', 'email', Rule::unique('solicitudes', 'email')],
-            'dpi' => ['required', 'string', 'min:13', Rule::unique('solicitudes', 'dpi')],
-        ], [
-            'email.unique' => 'Este correo ya está registrado en nuestro sistema.',
-            'dpi.unique' => 'Este número de DPI ya tiene una solicitud activa.',
-        ]);
+    // METODO UPDATE QUE SE EJECUTA AUTOMATICAMENTE
+    public function updated($propertyName)
+    {
+
+        // limpieza del dpi
+        // if($propertyName === 'dpi'){
+        //     $this->dpi = str_replace(' ', '', $this->dpi);
+        // }
+        // validacion tiempo real
+        if ($propertyName === 'email' || $propertyName === 'dpi') {
+            $this->validateOnly($propertyName, [
+                'email' => ['required', 'email', Rule::unique('solicitudes', 'email')],
+                'dpi' => ['required', 'string', 'min:13', Rule::unique('solicitudes', 'dpi')],
+            ]);
+        }
     }
-}
 
 
 
@@ -206,7 +221,11 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
     // $this->telefono = preg_replace('/\D/', '', $this->telefono); 
     // $this->dpi = preg_replace('/\D/', '', $this->dpi);
 
-        $this->validate();
+    $this->dpi = str_replace(' ', '', $this->dpi);
+    $this->telefono = str_replace('-', '', $this->telefono);
+    $this->validate();
+
+    $telefonoFinal = '+502' . $this->telefono;
 
         // $telefonoParaBD = '+502' . $this->telefono; 
     // $dpiParaBD = $this->dpi;
@@ -226,13 +245,14 @@ if (strtoupper($this->captcha) !== session('captcha_text')) {
                 $pathFile = $this->ruta->storeAs('curriculum', $nombreArchivo, 'public');
             }
 
+            
         // Guardar solicitud
         $solicitud = Solicitud::create([
             'sobre_mi' => $this->sobre_mi,
             'nombres' => $this->nombres,
             'apellidos' => $this->apellidos,
             'email' => $this->email,
-            'telefono'     => $this->telefono,
+            'telefono'     => $telefonoFinal,
             'dpi'      => $this->dpi,
             'sexo' => $this->sexo,
             'fechanac' => $this->fechanac,
@@ -358,6 +378,15 @@ public function reloadCaptcha()
     $this->captchaValidado = false; 
     $this->resetErrorBag('captcha');
 }
+
+public function updatedDpi()
+{
+    $this->validateOnly('dpi', [
+        'dpi' => 'required|unique:solicitudes,dpi'
+    ]);
+}
+
+
 
 
 
