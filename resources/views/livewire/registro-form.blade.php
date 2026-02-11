@@ -744,9 +744,15 @@ focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
             </span>
         </div>
 
-        <span class="text-[10px] uppercase tracking-wider font-bold text-[#7F22FE] bg-purple-50 px-2 py-0.5 rounded-lg border border-purple-100">
-            Opcional
-        </span>
+            <span class="text-[10px] uppercase tracking-wider font-bold 
+                text-sky-600 
+                bg-sky-50 
+                px-2 py-0.5 
+                rounded-lg 
+                border border-sky-200">
+                    Opcional
+                </span>
+
     </div>
 
     <textarea
@@ -754,9 +760,9 @@ focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
         wire:model.defer="sobre_mi"
         @input="updateCount()"
         rows="3"
-        class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4
-               focus:border-[#7F22FE] focus:ring-4 focus:ring-purple-100
-               border outline-none transition-all focus:bg-white text-sm"
+        class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 transition-all border outline-none
+                        focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
+
         placeholder="Breve resumen de tu experiencia..."
     ></textarea>
 
@@ -792,27 +798,27 @@ focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
 
     {{-- Contenedor de Carga --}}
     @if(!$ruta || $errors->has('ruta'))
-        <div class="group relative flex flex-col justify-center rounded-3xl border-2 border-dashed {{ $errors->has('ruta') ? 'border-red-300 bg-red-50/30' : 'border-slate-200 bg-blue-50/30' }} px-6 py-10 transition-all hover:border-[#7F22FE] hover:bg-[#F0F9FF]"
+        <div class="group relative flex flex-col justify-center rounded-3xl border-2 border-dashed {{ $errors->has('ruta') ? 'border-red-300 bg-red-50/30' : 'border-slate-200 bg-blue-50/30' }} px-6 py-10 transition-all hover:border-[#070F9E] hover:bg-[#070F9E]/5"
              wire:loading.class="opacity-50 pointer-events-none">
             
             <div class="text-center w-full">
                 <div wire:loading wire:target="ruta" class="py-4">
-                    <svg class="animate-spin h-8 w-8 text-[#7F22FE] mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg class="animate-spin h-8 w-8 text-[#070F9E] mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <p class="text-xs text-[#7F22FE] font-bold mt-2">Subiendo...</p>
+                    <p class="text-xs text-[#070F9E] font-bold mt-2">Subiendo...</p>
                 </div>
 
                 <div wire:loading.remove wire:target="ruta">
                     <label class="cursor-pointer flex flex-col items-center justify-center w-full transition-opacity hover:opacity-70">
                         <input type="file" wire:model="ruta" class="sr-only" accept="application/pdf">
 
-                        <svg class="mx-auto h-12 w-12 {{ $errors->has('ruta') ? 'text-red-400' : 'text-[#7F22FE]' }} mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="mx-auto h-12 w-12 {{ $errors->has('ruta') ? 'text-red-400' : 'text-[#070F9E]' }} mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
 
-                        <span class="font-bold {{ $errors->has('ruta') ? 'text-red-600' : 'text-[#7F22FE]' }}">
+                        <span class="font-bold {{ $errors->has('ruta') ? 'text-red-600' : 'text-[#070F9E]' }}">
                             Cargar archivo
                         </span>
                         <p class="text-xs text-slate-400 mt-1">PDF máximo 2MB</p>
