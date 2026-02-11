@@ -148,7 +148,7 @@
         <nav class="mb-8" aria-label="Progress">
             <ol class="flex items-center justify-center space-x-4 md:space-x-8">
                 <li class="flex items-center gap-3">
-                    <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl {{ $step === 1 ? 'bg-[#070F9E] text-white shadow-lg' : 'bg-white text-[#7F22FE] border border-purple-100' }} font-bold transition-all">1</span>
+                    <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl {{ $step === 1 ? 'bg-[#070F9E] text-white shadow-lg' : 'bg-white text-slate-400 border border-slate-200' }} font-bold transition-all">1</span>
                     <span class="text-xs sm:text-sm font-bold {{ $step === 1 ? 'text-slate-900' : 'text-slate-400' }}">Datos Personales</span>
                 </li>
 
@@ -159,7 +159,7 @@
                 <li class="h-px w-6 md:w-12 bg-slate-300"></li>
 
                 <li class="flex items-center gap-3">
-                    <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl {{ $step === 2 ? 'bg-[#7F22FE] text-white shadow-lg' : 'bg-white text-slate-400 border border-slate-200' }} font-bold transition-all">2</span>
+                    <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl {{ $step === 2 ? 'bg-[#070F9E] text-white shadow-lg' : 'bg-white text-slate-400 border border-slate-200' }} font-bold transition-all">2</span>
                     <span class="text-xs sm:text-sm font-bold {{ $step === 2 ? 'text-slate-900' : 'text-slate-400' }}">Ubicación y CV</span>
                 </li>
             </ol>
@@ -383,6 +383,10 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                             </svg>
                                             <span>Género</span>
+
+                                            <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-0.5 rounded-full font-bold border border-yellow-200">
+                                                    Según lo describe tu dpi
+                                            </span>
                                         </div>
 
                                         <template x-if="$wire.sexo && $wire.sexo !== ''">
@@ -416,9 +420,7 @@
 
                                                 <span class="text-xs uppercase tracking-wider font-black text-slate-500">Fecha de nacimiento</span>
 
-                                                <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-0.5 rounded-full font-bold border border-yellow-200">
-                                                    INGRESAR LA DE TU DPI
-                                                </span>
+                                                
                                             </div>
 
                                             <div>
@@ -572,14 +574,30 @@ focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
                         </svg>
                         <span>Departamento</span>
                     </div>
-                    <template x-if="departamento_id">
+                    
+
+                    <template x-if="$wire.departamento_id && $wire.departamento_id !== ''">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                         </svg>
                     </template>
+
+                    <template x-if="!$wire.departamento_id || $wire.departamento_id === ''">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </template>
+
+
+                    
                 </label>
                 <select wire:model.live="departamento_id" 
-                    class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] border outline-none text-slate-700 font-medium">
+                class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 transition-all border outline-none
+                        focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
+
+
+
+                    >
                     <option value="">Selecciona...</option>
                     @foreach($departamentos as $depto)
                         <option value="{{ $depto->id }}">{{ $depto->nombre }}</option>
@@ -595,14 +613,25 @@ focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
                         </svg>
                         <span>Municipio</span>
                     </div>
-                    <template x-if="municipio_id">
+                     <template x-if="$wire.municipio_id && $wire.municipio_id !== ''">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                         </svg>
                     </template>
+
+                    <template x-if="!$wire.municipio_id || $wire.municipio_id === ''">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </template>
                 </label>
                 <select id="municipio-select" wire:model.live="municipio_id" 
-                    class="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-4 focus:border-[#7F22FE] border outline-none text-slate-700 font-medium disabled:opacity-50"
+                class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 transition-all border outline-none
+                        focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
+
+
+             
+
                     {{ empty($municipios) ? 'disabled' : '' }}>
                     <option value="">Selecciona municipio</option>
                     @foreach($municipios as $muni)
@@ -614,9 +643,17 @@ focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
             <div class="space-y-2">
                 <label class="flex justify-between items-center text-xs uppercase tracking-wider font-black text-slate-500 mx-1">
                     <div class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6z" />
-                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                                class="h-4 w-4 text-slate-400" 
+                                fill="none" 
+                                viewBox="0 0 24 24" 
+                                stroke="currentColor" 
+                                stroke-width="2">
+                                <path stroke-linecap="round" 
+                                    stroke-linejoin="round" 
+                                    d="M9 4l6 2 6-2v16l-6 2-6-2-6 2V6l6-2z" />
+                            </svg>
+
                         <span>Zona</span>
                     </div>
 
@@ -634,11 +671,16 @@ focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
                 </label>
 
                 <div x-show="esGuatemala" x-cloak>
-                    <select x-model="zona" class="w-full rounded-2xl border-slate-100 bg-white px-4 py-4 focus:border-[#7F22FE] border outline-none text-slate-700 font-medium transition-all">
+                    <select x-model="zona" 
+                    class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 transition-all border outline-none
+                        focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
+
+
+                    ">
                         <option value="">Selecciona Zona</option>
                         @foreach(range(1, 25) as $z)
                             @if(!in_array($z, [20, 22, 23]))
-                                <option value="{{ $z }}">Zona {{ $z }}</option>
+                                <option value="{{ $z }}">{{ $z }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -646,7 +688,9 @@ focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
 
                 <div x-show="!esGuatemala" x-cloak>
                     <input type="text" disabled placeholder="No aplica"
-                        class="w-full rounded-2xl border-slate-100 bg-slate-100 px-4 py-4 border outline-none opacity-60 text-slate-400 cursor-not-allowed transition-all">
+                    class="w-full rounded-2xl border-slate-200 bg-slate-50 px-4 py-4 text-slate-900 transition-all border outline-none
+                        focus:border-[#070F9E] focus:ring-4 focus:ring-blue-100"
+                        >
                 </div>
             </div>
         </div>
